@@ -1,0 +1,6 @@
+{
+  "status": "blocked",
+  "mode": "local",
+  "reason": "Real JSON/tool capability probe failed",
+  "worker_started": false
+}

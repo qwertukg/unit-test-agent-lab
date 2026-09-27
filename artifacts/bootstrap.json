@@ -1,0 +1,14 @@
+[
+  {
+    "project_id": 1,
+    "source_mr": "http://localhost:8929/root/unit-test-agent-demo-java/-/merge_requests/1",
+    "source_iid": 1,
+    "stack": "java"
+  },
+  {
+    "project_id": 2,
+    "source_mr": "http://localhost:8929/root/unit-test-agent-demo-python/-/merge_requests/1",
+    "source_iid": 1,
+    "stack": "python"
+  }
+]

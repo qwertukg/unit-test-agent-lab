@@ -1,0 +1,52 @@
+============================= test session starts =============================
+platform win32 -- Python 3.13.7, pytest-9.1.1, pluggy-1.6.0
+rootdir: D:\Projects\unit-test-agent-lab-handoff\unit-test-agent-lab
+configfile: pyproject.toml
+plugins: anyio-4.15.1, langsmith-0.14.1, cov-7.1.0
+collected 11 items
+
+tests\test_agent_pricing.py ..F.F.....                                   [ 90%]
+tests\test_baseline.py .                                                 [100%]
+
+================================== FAILURES ===================================
+______________ test_discount_requirements[10000-True-None-9500] _______________
+
+amount = 10000, member = True, coupon = None, expected = 9500
+
+    @pytest.mark.parametrize("amount,member,coupon,expected", [
+        (1000, False, None, 1000), (1000, False, "SAVE10", 900),
+        (10000, True, None, 9500), (9999, True, None, 9999),
+        (10000, True, "SAVE10", 8500), (10000, False, None, 10000),
+        (0, True, "SAVE10", 0), (101, False, "SAVE10", 90),
+    ])
+    def test_discount_requirements(amount, member, coupon, expected):
+>       assert total(amount, member, coupon) == expected
+E       assert 10000 == 9500
+E        +  where 10000 = total(10000, True, None)
+
+tests\test_agent_pricing.py:14: AssertionError
+_____________ test_discount_requirements[10000-True-SAVE10-8500] ______________
+
+amount = 10000, member = True, coupon = 'SAVE10', expected = 8500
+
+    @pytest.mark.parametrize("amount,member,coupon,expected", [
+        (1000, False, None, 1000), (1000, False, "SAVE10", 900),
+        (10000, True, None, 9500), (9999, True, None, 9999),
+        (10000, True, "SAVE10", 8500), (10000, False, None, 10000),
+        (0, True, "SAVE10", 0), (101, False, "SAVE10", 90),
+    ])
+    def test_discount_requirements(amount, member, coupon, expected):
+>       assert total(amount, member, coupon) == expected
+E       AssertionError: assert 9000 == 8500
+E        +  where 9000 = total(10000, True, 'SAVE10')
+
+tests\test_agent_pricing.py:14: AssertionError
+- generated xml file: D:\Projects\unit-test-agent-lab-handoff\unit-test-agent-lab\.state\local-demos\python-41c4a10a\reports\junit.xml -
+=============================== tests coverage ================================
+_______________ coverage: platform win32, python 3.13.7-final-0 _______________
+
+Coverage XML written to file reports/coverage.xml
+=========================== short test summary info ===========================
+FAILED tests\test_agent_pricing.py::test_discount_requirements[10000-True-None-9500]
+FAILED tests\test_agent_pricing.py::test_discount_requirements[10000-True-SAVE10-8500]
+========================= 2 failed, 9 passed in 0.27s =========================

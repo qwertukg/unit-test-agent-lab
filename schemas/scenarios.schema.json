@@ -1,0 +1,91 @@
+{
+  "$defs": {
+    "Scenario": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "title": "Id",
+          "type": "string"
+        },
+        "purpose": {
+          "title": "Purpose",
+          "type": "string"
+        },
+        "requirements": {
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Requirements",
+          "type": "array"
+        },
+        "paths": {
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Paths",
+          "type": "array"
+        },
+        "setup": {
+          "title": "Setup",
+          "type": "string"
+        },
+        "inputs": {
+          "title": "Inputs",
+          "type": "string"
+        },
+        "expected": {
+          "title": "Expected",
+          "type": "string"
+        },
+        "kind": {
+          "enum": [
+            "normal",
+            "boundary",
+            "negative"
+          ],
+          "title": "Kind",
+          "type": "string"
+        },
+        "allowed_mocks": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Allowed Mocks",
+          "type": "array"
+        }
+      },
+      "required": [
+        "id",
+        "purpose",
+        "requirements",
+        "paths",
+        "setup",
+        "inputs",
+        "expected",
+        "kind",
+        "allowed_mocks"
+      ],
+      "title": "Scenario",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "scenarios": {
+      "items": {
+        "$ref": "#/$defs/Scenario"
+      },
+      "maxItems": 40,
+      "minItems": 1,
+      "title": "Scenarios",
+      "type": "array"
+    }
+  },
+  "required": [
+    "scenarios"
+  ],
+  "title": "Scenarios",
+  "type": "object"
+}

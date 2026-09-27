@@ -1,0 +1,31 @@
+{
+  "date": "2026-09-27",
+  "os": "Windows-11-10.0.22631-SP0",
+  "python": "3.13.7",
+  "packages": {
+    "fastapi": "0.141.1",
+    "uvicorn": "0.54.0",
+    "langgraph": "1.2.12",
+    "langgraph-checkpoint-postgres": "3.1.2",
+    "psycopg": "3.3.6",
+    "litellm": "1.102.1",
+    "pytest": "9.1.1",
+    "pytest-cov": "7.1.0",
+    "ruff": "0.16.9",
+    "uv": "0.12.19"
+  },
+  "tools": {
+    "compose": {
+      "path": ".tools/docker-compose.exe",
+      "sha256": "6b3bccfabcdd172e1d9e15d011b54c9b5b13b93b1153148108f55e4349055955",
+      "usage": "native offline manifest validation only"
+    },
+    "kubectl": {
+      "path": ".tools/kubectl.exe",
+      "sha256": "d118a8ddb0de15ff230189c85f5157e752405eb0ae8fa680d284de094c9a20f0",
+      "usage": "native offline manifest validation only"
+    }
+  },
+  "database": "portable PostgreSQL 17.6, local test only; Compose pins 17.11, not run",
+  "java": "existing JDK 18.0.2.1; Docker Temurin 17 not run"
+}

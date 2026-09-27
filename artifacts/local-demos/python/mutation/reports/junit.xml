@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="2" skipped="0" tests="11" time="0.235" timestamp="2026-09-27T14:26:12.810723+05:00" hostname="PC"><testcase classname=".state.local-demos.python-41c4a10a.tests.test_agent_pricing" name="test_discount_requirements[1000-False-None-1000]" time="0.003" /><testcase classname=".state.local-demos.python-41c4a10a.tests.test_agent_pricing" name="test_discount_requirements[1000-False-SAVE10-900]" time="0.003" /><testcase classname=".state.local-demos.python-41c4a10a.tests.test_agent_pricing" name="test_discount_requirements[10000-True-None-9500]" time="0.006"><failure message="assert 10000 == 9500&#10; +  where 10000 = total(10000, True, None)">amount = 10000, member = True, coupon = None, expected = 9500
+
+    @pytest.mark.parametrize("amount,member,coupon,expected", [
+        (1000, False, None, 1000), (1000, False, "SAVE10", 900),
+        (10000, True, None, 9500), (9999, True, None, 9999),
+        (10000, True, "SAVE10", 8500), (10000, False, None, 10000),
+        (0, True, "SAVE10", 0), (101, False, "SAVE10", 90),
+    ])
+    def test_discount_requirements(amount, member, coupon, expected):
+&gt;       assert total(amount, member, coupon) == expected
+E       assert 10000 == 9500
+E        +  where 10000 = total(10000, True, None)
+
+tests\test_agent_pricing.py:14: AssertionError</failure></testcase><testcase classname=".state.local-demos.python-41c4a10a.tests.test_agent_pricing" name="test_discount_requirements[9999-True-None-9999]" time="0.002" /><testcase classname=".state.local-demos.python-41c4a10a.tests.test_agent_pricing" name="test_discount_requirements[10000-True-SAVE10-8500]" time="0.002"><failure message="AssertionError: assert 9000 == 8500&#10; +  where 9000 = total(10000, True, 'SAVE10')">amount = 10000, member = True, coupon = 'SAVE10', expected = 8500
+
+    @pytest.mark.parametrize("amount,member,coupon,expected", [
+        (1000, False, None, 1000), (1000, False, "SAVE10", 900),
+        (10000, True, None, 9500), (9999, True, None, 9999),
+        (10000, True, "SAVE10", 8500), (10000, False, None, 10000),
+        (0, True, "SAVE10", 0), (101, False, "SAVE10", 90),
+    ])
+    def test_discount_requirements(amount, member, coupon, expected):
+&gt;       assert total(amount, member, coupon) == expected
+E       AssertionError: assert 9000 == 8500
+E        +  where 9000 = total(10000, True, 'SAVE10')
+
+tests\test_agent_pricing.py:14: AssertionError</failure></testcase><testcase classname=".state.local-demos.python-41c4a10a.tests.test_agent_pricing" name="test_discount_requirements[10000-False-None-10000]" time="0.002" /><testcase classname=".state.local-demos.python-41c4a10a.tests.test_agent_pricing" name="test_discount_requirements[0-True-SAVE10-0]" time="0.002" /><testcase classname=".state.local-demos.python-41c4a10a.tests.test_agent_pricing" name="test_discount_requirements[101-False-SAVE10-90]" time="0.002" /><testcase classname=".state.local-demos.python-41c4a10a.tests.test_agent_pricing" name="test_negative" time="0.002" /><testcase classname=".state.local-demos.python-41c4a10a.tests.test_agent_pricing" name="test_invalid_coupon" time="0.001" /><testcase classname=".state.local-demos.python-41c4a10a.tests.test_baseline" name="test_regular_total" time="0.001" /></testsuite></testsuites>

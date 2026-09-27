@@ -1,0 +1,56 @@
+{
+  "$defs": {
+    "TestFile": {
+      "additionalProperties": false,
+      "properties": {
+        "path": {
+          "title": "Path",
+          "type": "string"
+        },
+        "content": {
+          "maxLength": 60000,
+          "minLength": 1,
+          "title": "Content",
+          "type": "string"
+        },
+        "scenario_ids": {
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Scenario Ids",
+          "type": "array"
+        }
+      },
+      "required": [
+        "path",
+        "content",
+        "scenario_ids"
+      ],
+      "title": "TestFile",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "files": {
+      "items": {
+        "$ref": "#/$defs/TestFile"
+      },
+      "maxItems": 12,
+      "minItems": 1,
+      "title": "Files",
+      "type": "array"
+    },
+    "rationale": {
+      "title": "Rationale",
+      "type": "string"
+    }
+  },
+  "required": [
+    "files",
+    "rationale"
+  ],
+  "title": "Tests",
+  "type": "object"
+}

@@ -1,0 +1,202 @@
+name: unit-test-agent-lab
+
+x-agent-env: &agent-env
+  DATABASE_URL: postgresql://lab:${POSTGRES_PASSWORD:?run init_env.py}@postgres:5432/lab
+  GITLAB_URL: http://gitlab:8929
+  GITLAB_PUBLIC_URL: http://localhost:8929
+  GITLAB_TOKEN: ${GITLAB_TOKEN:-}
+  API_TOKEN: ${API_TOKEN:?run init_env.py}
+  WEBHOOK_SECRET: ${WEBHOOK_SECRET:?run init_env.py}
+  MODEL_BASE_URL: http://litellm:4000/v1
+  MODEL_API_KEY: ${MODEL_API_KEY:?run init_env.py}
+  MODEL_ALIAS: test-agent
+  MODEL_MODE: ${MODEL_MODE:-cloud}
+  MODEL_JSON_MODE: ${MODEL_JSON_MODE:-json_object}
+  MODEL_TIMEOUT: ${MODEL_TIMEOUT:-120}
+  TOKEN_PRICE_UPPER_USD: ${TOKEN_PRICE_UPPER_USD:-0}
+  MAX_COST_USD: ${MAX_COST_USD:-5}
+  MAX_TOTAL_TOKENS: ${MAX_TOTAL_TOKENS:-250000}
+  MAX_MODEL_CALLS: ${MAX_MODEL_CALLS:-32}
+  MAX_ITERATIONS: ${MAX_ITERATIONS:-4}
+  MAX_RUN_SECONDS: ${MAX_RUN_SECONDS:-3600}
+  PROJECT_CONFIG: /app/config/projects.yaml
+
+x-gateway: &gateway
+  image: unit-test-agent-proxy:0.1
+  build:
+    context: .
+    target: proxy
+    args:
+      PYTHON_IMAGE: ${PYTHON_IMAGE:?load config/images.env}
+  command: [uvicorn, agent_lab.gateway:app, --host, 0.0.0.0, --port, '8000', --no-access-log]
+  restart: unless-stopped
+  networks: [models]
+  read_only: true
+  tmpfs: [/tmp]
+  cap_drop: [ALL]
+  security_opt: [no-new-privileges:true]
+  healthcheck:
+    test: [CMD, python, -c, "import urllib.request; urllib.request.urlopen('http://localhost:8000/health')"]
+    interval: 15s
+    timeout: 5s
+    retries: 5
+
+x-cloud-env: &cloud-env
+  MODEL_MODE: ${MODEL_MODE:-cloud}
+  UPSTREAM_TIMEOUT_SECONDS: ${UPSTREAM_TIMEOUT_SECONDS:-120}
+  CLOUD_MODEL: ${CLOUD_MODEL:-}
+  CLOUD_API_KEY: ${CLOUD_API_KEY:-}
+  CLOUD_BASE_URL: ${CLOUD_BASE_URL:-}
+  GATEWAY_KEY: ${GATEWAY_KEY:?run init_env.py}
+
+services:
+  postgres:
+    image: ${POSTGRES_IMAGE:?load config/images.env}
+    environment:
+      POSTGRES_DB: lab
+      POSTGRES_USER: lab
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?run init_env.py}
+    volumes: [postgres-data:/var/lib/postgresql/data]
+    networks: [core]
+    restart: unless-stopped
+    healthcheck:
+      test: [CMD-SHELL, 'pg_isready -U lab -d lab']
+      interval: 5s
+      retries: 20
+  gitlab:
+    image: ${GITLAB_IMAGE:?load config/images.env}
+    hostname: gitlab
+    shm_size: 256m
+    environment:
+      GITLAB_ROOT_PASSWORD: ${GITLAB_ROOT_PASSWORD:?run init_env.py}
+      GITLAB_OMNIBUS_CONFIG: |
+        external_url 'http://localhost:8929'
+        nginx['listen_port'] = 8929
+        gitlab_rails['gitlab_shell_ssh_port'] = 2224
+        gitlab_rails['initial_root_password'] = ENV['GITLAB_ROOT_PASSWORD']
+        gitlab_rails['usage_ping_enabled'] = false
+        prometheus_monitoring['enable'] = false
+        puma['worker_processes'] = 2
+        sidekiq['concurrency'] = 5
+    ports: ['127.0.0.1:8929:8929', '127.0.0.1:2224:22']
+    volumes: [gitlab-config:/etc/gitlab, gitlab-logs:/var/log/gitlab, gitlab-data:/var/opt/gitlab]
+    networks: [core, runner]
+    restart: unless-stopped
+    healthcheck:
+      test: [CMD, curl, --fail, --silent, 'http://localhost:8929/-/readiness']
+      interval: 20s
+      timeout: 10s
+      retries: 60
+      start_period: 180s
+  dind:
+    image: ${DIND_IMAGE:?load config/images.env}
+    hostname: dind
+    # Dedicated lab daemon. privileged is HOST POWER; see docs/SECURITY.md.
+    privileged: true
+    environment:
+      DOCKER_TLS_CERTDIR: /certs
+    volumes: [dind-data:/var/lib/docker, runner-certs:/certs/client]
+    networks: [runner]
+    restart: unless-stopped
+    healthcheck:
+      test: [CMD, docker, info]
+      interval: 10s
+      retries: 20
+  runner:
+    image: ${RUNNER_IMAGE:?load config/images.env}
+    volumes: [runner-config:/etc/gitlab-runner, 'runner-certs:/certs/client:ro']
+    networks: [runner]
+    restart: unless-stopped
+    depends_on:
+      dind: {condition: service_healthy}
+      gitlab: {condition: service_healthy}
+  ci-builder:
+    image: ${DOCKER_CLI_IMAGE:?load config/images.env}
+    profiles: [bootstrap]
+    environment:
+      DOCKER_HOST: tcp://dind:2376
+      DOCKER_TLS_VERIFY: '1'
+      DOCKER_CERT_PATH: /certs/client
+    volumes: ['runner-certs:/certs/client:ro', './ci:/src/ci:ro', './demo/python/requirements.lock:/src/demo/python/requirements.lock:ro']
+    working_dir: /src
+    networks: [runner]
+    entrypoint: [docker]
+    command: [build, -f, ci/Dockerfile, --build-arg, 'MAVEN_IMAGE=${MAVEN_IMAGE}', -t, 'unit-test-agent-ci:0.1', .]
+  api:
+    image: unit-test-agent:0.1
+    build:
+      context: .
+      target: base
+      args:
+        PYTHON_IMAGE: ${PYTHON_IMAGE:?load config/images.env}
+    environment: *agent-env
+    ports: ['127.0.0.1:8000:8000']
+    volumes: ['./config/projects.yaml:/app/config/projects.yaml:ro']
+    networks: [core]
+    restart: unless-stopped
+    read_only: true
+    tmpfs: [/tmp]
+    cap_drop: [ALL]
+    security_opt: [no-new-privileges:true]
+    depends_on:
+      postgres: {condition: service_healthy}
+    healthcheck:
+      test: [CMD, python, -c, "import urllib.request; urllib.request.urlopen('http://localhost:8000/ready')"]
+      interval: 10s
+      retries: 10
+  worker:
+    image: unit-test-agent:0.1
+    command: [python, -m, agent_lab.worker]
+    environment: *agent-env
+    volumes: [workspaces:/app/workspaces, './config/projects.yaml:/app/config/projects.yaml:ro']
+    networks: [core, models]
+    restart: unless-stopped
+    cap_drop: [ALL]
+    security_opt: [no-new-privileges:true]
+    depends_on:
+      api: {condition: service_healthy}
+      gitlab: {condition: service_healthy}
+  litellm:
+    image: unit-test-agent-proxy:0.1
+    build:
+      context: .
+      target: proxy
+      args:
+        PYTHON_IMAGE: ${PYTHON_IMAGE:?load config/images.env}
+    environment:
+      MODEL_MODE: ${MODEL_MODE:-cloud}
+      MODEL_JSON_MODE: ${MODEL_JSON_MODE:-json_object}
+      MODEL_API_KEY: ${MODEL_API_KEY:?run init_env.py}
+      GATEWAY_KEY: ${GATEWAY_KEY:?run init_env.py}
+    ports: ['127.0.0.1:4000:4000']
+    networks: [models]
+    restart: unless-stopped
+    cap_drop: [ALL]
+    security_opt: [no-new-privileges:true]
+    depends_on:
+      spark-1: {condition: service_healthy}
+      spark-2: {condition: service_healthy}
+      spark-3: {condition: service_healthy}
+  spark-1:
+    <<: *gateway
+    environment: {<<: *cloud-env, GATEWAY_ID: spark-1}
+  spark-2:
+    <<: *gateway
+    environment: {<<: *cloud-env, GATEWAY_ID: spark-2}
+  spark-3:
+    <<: *gateway
+    environment: {<<: *cloud-env, GATEWAY_ID: spark-3}
+
+networks:
+  core: {}
+  models: {}
+  runner: {}
+volumes:
+  postgres-data: {}
+  gitlab-config: {}
+  gitlab-logs: {}
+  gitlab-data: {}
+  dind-data: {}
+  runner-certs: {}
+  runner-config: {}
+  workspaces: {}

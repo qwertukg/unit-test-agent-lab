@@ -1,0 +1,14 @@
+.git
+.venv
+.env
+.env.*
+.tools
+.state
+tmp
+workspaces
+artifacts
+references
+__pycache__
+.pytest_cache
+.ruff_cache
+demo/**/target

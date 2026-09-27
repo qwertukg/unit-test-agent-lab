@@ -1,0 +1,11 @@
+{
+  "mode": "actual LiteLLM routing; HTTP test doubles, no cloud",
+  "requests_to_endpoints": [
+    5,
+    7,
+    7
+  ],
+  "successful_routed_requests": 12,
+  "failed_endpoint": "stub-0",
+  "litellm": "1.102.1"
+}

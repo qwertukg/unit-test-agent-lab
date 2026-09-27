@@ -1,0 +1,40 @@
+model_list:
+  - model_name: test-agent
+    litellm_params:
+      model: openai/cloud-model
+      api_base: http://spark-1:8000/v1
+      api_key: os.environ/GATEWAY_KEY
+      rpm: 6
+      tpm: 80000
+    model_info:
+      id: spark-1
+  - model_name: test-agent
+    litellm_params:
+      model: openai/cloud-model
+      api_base: http://spark-2:8000/v1
+      api_key: os.environ/GATEWAY_KEY
+      rpm: 6
+      tpm: 80000
+    model_info:
+      id: spark-2
+  - model_name: test-agent
+    litellm_params:
+      model: openai/cloud-model
+      api_base: http://spark-3:8000/v1
+      api_key: os.environ/GATEWAY_KEY
+      rpm: 6
+      tpm: 80000
+    model_info:
+      id: spark-3
+router_settings:
+  routing_strategy: simple-shuffle
+  num_retries: 2
+  allowed_fails: 1
+  cooldown_time: 30
+  timeout: 330
+litellm_settings:
+  drop_params: false
+  set_verbose: false
+  telemetry: false
+general_settings:
+  master_key: os.environ/MODEL_API_KEY

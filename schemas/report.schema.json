@@ -1,0 +1,153 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "const": 1,
+      "default": 1,
+      "title": "Schema Version",
+      "type": "integer"
+    },
+    "sha": {
+      "title": "Sha",
+      "type": "string"
+    },
+    "source_sha": {
+      "title": "Source Sha",
+      "type": "string"
+    },
+    "pipeline_id": {
+      "title": "Pipeline Id",
+      "type": "integer"
+    },
+    "job_id": {
+      "title": "Job Id",
+      "type": "integer"
+    },
+    "status": {
+      "enum": [
+        "passed",
+        "assertion_failure",
+        "build_error",
+        "infra_error"
+      ],
+      "title": "Status",
+      "type": "string"
+    },
+    "tests": {
+      "minimum": 0,
+      "title": "Tests",
+      "type": "integer"
+    },
+    "failures": {
+      "minimum": 0,
+      "title": "Failures",
+      "type": "integer"
+    },
+    "errors": {
+      "minimum": 0,
+      "title": "Errors",
+      "type": "integer"
+    },
+    "coverage": {
+      "anyOf": [
+        {
+          "maximum": 100,
+          "minimum": 0,
+          "type": "number"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Coverage"
+    },
+    "diff_coverage": {
+      "anyOf": [
+        {
+          "maximum": 100,
+          "minimum": 0,
+          "type": "number"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Diff Coverage"
+    },
+    "threshold": {
+      "maximum": 100,
+      "minimum": 0,
+      "title": "Threshold",
+      "type": "number"
+    },
+    "metric": {
+      "enum": [
+        "line",
+        "diff_line"
+      ],
+      "title": "Metric",
+      "type": "string"
+    },
+    "gate": {
+      "enum": [
+        "passed",
+        "failed",
+        "unknown"
+      ],
+      "title": "Gate",
+      "type": "string"
+    },
+    "junit_paths": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Junit Paths",
+      "type": "array"
+    },
+    "coverage_path": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Coverage Path"
+    },
+    "log_path": {
+      "title": "Log Path",
+      "type": "string"
+    },
+    "tool": {
+      "title": "Tool",
+      "type": "string"
+    },
+    "created_at": {
+      "title": "Created At",
+      "type": "string"
+    }
+  },
+  "required": [
+    "sha",
+    "source_sha",
+    "pipeline_id",
+    "job_id",
+    "status",
+    "tests",
+    "failures",
+    "errors",
+    "coverage",
+    "diff_coverage",
+    "threshold",
+    "metric",
+    "gate",
+    "junit_paths",
+    "coverage_path",
+    "log_path",
+    "tool",
+    "created_at"
+  ],
+  "title": "Report",
+  "type": "object"
+}

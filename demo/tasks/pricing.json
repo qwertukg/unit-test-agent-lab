@@ -1,0 +1,12 @@
+{
+  "id": "DEMO-1",
+  "version": 1,
+  "title": "Add discounts to synthetic pricing",
+  "requirements": [
+    {"id": "R1", "text": "A regular order returns its amount in cents without a discount."},
+    {"id": "R2", "text": "SAVE10 applies a 10 percent discount."},
+    {"id": "R3", "text": "Membership adds 5 percent discount only at amounts of at least 10000 cents. Discounts add together."},
+    {"id": "R4", "text": "Negative amounts and unknown coupons raise the language's argument/value error."},
+    {"id": "R5", "text": "Fractional cents round down. A zero amount is valid."}
+  ]
+}

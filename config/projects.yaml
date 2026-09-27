@@ -1,0 +1,23 @@
+projects:
+- id: 1
+  name: unit-test-agent-demo-java
+  stack: java
+  test_paths:
+  - src/test/java
+  trusted_files:
+    .test-agent.json: e5f15a3e9db4ea44abc053e5b6dc118b3996ad2dbb550797a763d4e41301e04d
+    .gitlab-ci.yml: 050c27f12394ddb184a5e50a09f34259417708db16c732338cbd5440a08d44ee
+    .agent-ci.py: b0001af66f0277a8de6b61c19840f97ea7a497850534b115039fae4944e631ab
+    pom.xml: a6c1ccaab1b985b386697e51cbfd38a688c85a94c81b5ff5744c91be25cbd9da
+  task_fixture: demo/tasks/pricing.json
+- id: 2
+  name: unit-test-agent-demo-python
+  stack: python
+  test_paths:
+  - tests
+  trusted_files:
+    .test-agent.json: 28e6e92989206acc0e849c4675d02bfca063b11464c73d51f68e536c60442a6a
+    .gitlab-ci.yml: 050c27f12394ddb184a5e50a09f34259417708db16c732338cbd5440a08d44ee
+    .agent-ci.py: b0001af66f0277a8de6b61c19840f97ea7a497850534b115039fae4944e631ab
+    requirements.lock: c217c3cbfd94b5f131aec1ba2c4a66d5896ac67506423c5573dd32f5d667a6d0
+  task_fixture: demo/tasks/pricing.json

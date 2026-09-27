@@ -1,0 +1,2 @@
+# Populate explicitly with approved target GitLab project IDs and reviewed file hashes.
+projects: []

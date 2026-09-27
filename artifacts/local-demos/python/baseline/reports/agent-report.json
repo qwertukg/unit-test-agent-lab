@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "sha": "6b213c008dd6e296e9db24f15dec8e9a89aa7a30",
+  "source_sha": "6b213c008dd6e296e9db24f15dec8e9a89aa7a30",
+  "pipeline_id": 1,
+  "job_id": 1,
+  "status": "passed",
+  "tests": 1,
+  "failures": 0,
+  "errors": 0,
+  "coverage": 66.66666666666666,
+  "diff_coverage": 62.5,
+  "threshold": 80,
+  "metric": "diff_line",
+  "gate": "failed",
+  "junit_paths": [
+    "reports/junit.xml"
+  ],
+  "coverage_path": "reports/coverage.xml",
+  "log_path": "reports/run.log",
+  "tool": "cobertura",
+  "created_at": "2026-09-27T09:26:07.409768+00:00"
+}

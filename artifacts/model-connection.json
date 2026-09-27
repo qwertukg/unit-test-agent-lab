@@ -1,0 +1,1 @@
+{"mode": "real local model through Docker gateways", "gateways": [{"status": "ok", "gateway": "spark-1", "mode": "local"}, {"status": "ok", "gateway": "spark-2", "mode": "local"}, {"status": "ok", "gateway": "spark-3", "mode": "local"}], "proxy_authenticated_models_http": 200, "gateway_json_probe_http": 502, "status": "blocked"}

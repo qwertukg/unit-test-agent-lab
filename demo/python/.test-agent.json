@@ -1,0 +1,11 @@
+{
+  "stack": "python",
+  "commands": [["python", "-m", "pytest", "tests", "--junitxml=reports/junit.xml", "--cov=product", "--cov-branch", "--cov-report=xml:reports/coverage.xml"]],
+  "junit_glob": "reports/junit.xml",
+  "coverage_path": "reports/coverage.xml",
+  "coverage_format": "cobertura",
+  "source_root": "product",
+  "threshold": 80,
+  "metric": "diff_line",
+  "target_branch": "dev"
+}

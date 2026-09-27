@@ -1,0 +1,11 @@
+{
+  "stack": "java",
+  "commands": [["mvn", "-B", "clean", "test", "-Dmaven.test.failure.ignore=true"]],
+  "junit_glob": "target/surefire-reports/TEST-*.xml",
+  "coverage_path": "target/site/jacoco/jacoco.xml",
+  "coverage_format": "jacoco",
+  "source_root": "src/main/java",
+  "threshold": 80,
+  "metric": "diff_line",
+  "target_branch": "dev"
+}

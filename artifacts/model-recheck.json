@@ -1,0 +1,11 @@
+{
+  "host": "192.168.0.105",
+  "model": "mtplx-qwen36-27b-optimized-speed",
+  "models_http": 200,
+  "models": [
+    "mtplx-qwen36-27b-optimized-speed"
+  ],
+  "json_http": 400,
+  "seconds": 0.43,
+  "error": "response_format type 'json_object' requires the optional llguidance dependency (pip install llguidance); refusing to silently return unconstrained output"
+}

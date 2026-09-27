@@ -1,0 +1,78 @@
+{
+  "$defs": {
+    "Finding": {
+      "additionalProperties": false,
+      "properties": {
+        "object_id": {
+          "enum": [
+            "O1",
+            "O2",
+            "O3",
+            "O4",
+            "O5",
+            "O6",
+            "O7",
+            "O8",
+            "O9"
+          ],
+          "title": "Object Id",
+          "type": "string"
+        },
+        "assessment": {
+          "title": "Assessment",
+          "type": "string"
+        }
+      },
+      "required": [
+        "object_id",
+        "assessment"
+      ],
+      "title": "Finding",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "decision": {
+      "enum": [
+        "publish",
+        "revise_scenarios",
+        "revise_tests"
+      ],
+      "title": "Decision",
+      "type": "string"
+    },
+    "findings": {
+      "items": {
+        "$ref": "#/$defs/Finding"
+      },
+      "minItems": 7,
+      "title": "Findings",
+      "type": "array"
+    },
+    "rationale": {
+      "title": "Rationale",
+      "type": "string"
+    },
+    "product_defect": {
+      "title": "Product Defect",
+      "type": "boolean"
+    },
+    "evidence": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Evidence",
+      "type": "array"
+    }
+  },
+  "required": [
+    "decision",
+    "findings",
+    "rationale",
+    "product_defect",
+    "evidence"
+  ],
+  "title": "Review",
+  "type": "object"
+}

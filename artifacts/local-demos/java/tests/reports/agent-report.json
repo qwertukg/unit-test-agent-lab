@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "sha": "65f0cb9520723855526d39eef314da6822b38882",
+  "source_sha": "9ecf33fd679a58e65a632e1738809e5b4343e8b3",
+  "pipeline_id": 2,
+  "job_id": 2,
+  "status": "passed",
+  "tests": 10,
+  "failures": 0,
+  "errors": 0,
+  "coverage": 100.0,
+  "diff_coverage": 100.0,
+  "threshold": 80,
+  "metric": "diff_line",
+  "gate": "passed",
+  "junit_paths": [
+    "target/surefire-reports/TEST-lab.AgentPricingTest.xml",
+    "target/surefire-reports/TEST-lab.PricingTest.xml"
+  ],
+  "coverage_path": "target/site/jacoco/jacoco.xml",
+  "log_path": "reports/run.log",
+  "tool": "jacoco",
+  "created_at": "2026-09-27T09:26:35.805017+00:00"
+}

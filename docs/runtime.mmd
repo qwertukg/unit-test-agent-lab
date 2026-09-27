@@ -1,0 +1,57 @@
+flowchart TB
+    subgraph LEGEND["Легенда"]
+      direction LR
+      L1["действие"] --> L2{"условие"}
+      L3[/"объект"/] -.-> L4["сервис"]
+    end
+    E(["1. Событие: webhook или polling GitLab API"]) --> EV[("1.1. PostgreSQL events: stable identity")]
+    EV --> G{"1.2. Авторский 👎 / late tagged note
+или fresh unit-coverage fail?"}
+    G -->|"Нет"| IGN(["Сохранить disposition; не генерировать"])
+    G -->|"Да"| Q[("1.3. Durable run queue")]
+    Q --> LOCK{"2. Session lock project/MR получен?"}
+    LOCK -->|"Нет"| Q
+    LOCK -->|"Да"| CLOCK["Первое исполнение: сохранить started_at;
+retry/restart/resume не сбрасывают deadline"]
+    CLOCK --> C["2.1. collect: свежий MR/SHA, reviewed config,
+snapshot, source reports, task fixture, feedback"]
+    C --> O[/"O1–O5 + предыдущие O6–O9 при feedback"/]
+    O -.-> A["3. Analyst"]
+    A --> S[/"O6 Scenarios"/] --> COD["4. Coder"]
+    COD --> P{"4.1. Test-only manifest разрешён?"}
+    P -->|"Нет"| STOP(["needs_human: policy / budget / missing data"])
+    P -->|"Да"| T[/"O7 Tests: immutable version"/]
+    T --> INT[("5. Intent commit/ref/pipeline")]
+    INT --> RECON["5.1. Reconcile immutable ref и existing pipeline"]
+    RECON --> CI["5.2. GitLab Runner: exact source+tests revision"]
+    CI --> R[/"O2/O3: новые JUnit, logs, coverage, SHA/job/pipeline"/]
+    R --> TYPE{"5.3. Результат CI?"}
+    TYPE -->|"Infrastructure; bounded retry"| INT
+    TYPE -->|"Build error"| COD
+    TYPE -->|"Passed либо failing assertions"| REV["6. Reviewer: каждый доступный O1–O9"]
+    REV --> REVIEW[/"O8 Review"/] --> DEC{"6.1. Решение?"}
+    DEC -->|"revise_scenarios"| A
+    DEC -->|"revise_tests"| COD
+    DEC -->|"Product defect / limits"| STOP
+    DEC -->|"publish"| FRESH{"7. Fresh SHA, open MR, passing exact CI?"}
+    FRESH -->|"SHA изменился"| EV
+    FRESH -->|"Нет: другая причина"| STOP
+    FRESH -->|"Да"| PUSH["7.1. Intent + reconcile; exact tested commit,
+force-with-lease ai-tests branch, один MR в feature"]
+    PUSH --> WAIT(["7.2. Human review / merge; ждать feedback"])
+    WAIT -->|"O9: author award ID / tagged note"| EV
+    DB[("8. PostgreSQL: checkpoints, objects O1–O9,
+actions, leases, feedback, usage")]
+    DB -.-> C
+    DB -.-> RECON
+    REV -.-> DB
+    RESTART(["9. Worker restart"]) --> LOAD["9.1. Claim expired run; load PostgresSaver checkpoint"]
+    LOAD --> RECON
+    classDef object fill:#DBEAFE,stroke:#2563EB,color:#172554
+    classDef agent fill:#DCFCE7,stroke:#16A34A,color:#14532D
+    classDef condition fill:#FEF3C7,stroke:#D97706,color:#78350F
+    classDef storage fill:#EDE9FE,stroke:#7C3AED,color:#4C1D95
+    class O,S,T,R,REVIEW,L3 object
+    class A,COD,REV agent
+    class G,LOCK,P,TYPE,DEC,FRESH,L2 condition
+    class EV,Q,INT,DB storage

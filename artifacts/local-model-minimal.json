@@ -1,0 +1,7 @@
+{
+  "status": "failed",
+  "error_type": "ReadTimeout",
+  "seconds": 60.42,
+  "max_tokens": 16,
+  "response_format_sent": false
+}

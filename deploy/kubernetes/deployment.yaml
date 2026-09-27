@@ -1,0 +1,75 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: agent
+spec:
+  replicas: 1
+  selector:
+    matchLabels: {app: unit-test-agent}
+  template:
+    metadata:
+      labels: {app: unit-test-agent}
+    spec:
+      automountServiceAccountToken: false
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 10001
+        fsGroup: 10001
+        seccompProfile: {type: RuntimeDefault}
+      initContainers:
+        - name: migrate
+          image: registry.example.invalid/unit-test-agent:0.1
+          command: [python, -m, agent_lab.migrate]
+          envFrom: [{secretRef: {name: agent-secrets}}]
+          securityContext: {allowPrivilegeEscalation: false, capabilities: {drop: [ALL]}}
+      containers:
+        - name: api
+          image: registry.example.invalid/unit-test-agent:0.1
+          envFrom: [{secretRef: {name: agent-secrets}}]
+          env:
+            - {name: PROJECT_CONFIG, value: /etc/agent/projects.yaml}
+          ports: [{containerPort: 8000}]
+          readinessProbe: {httpGet: {path: /ready, port: 8000}, initialDelaySeconds: 5, periodSeconds: 10}
+          livenessProbe: {httpGet: {path: /health, port: 8000}, initialDelaySeconds: 15, periodSeconds: 20}
+          resources: {requests: {cpu: 100m, memory: 256Mi}, limits: {cpu: '1', memory: 512Mi}}
+          securityContext: {allowPrivilegeEscalation: false, readOnlyRootFilesystem: true, capabilities: {drop: [ALL]}}
+          volumeMounts: [{name: config, mountPath: /etc/agent, readOnly: true}, {name: tmp, mountPath: /tmp}]
+        - name: worker
+          image: registry.example.invalid/unit-test-agent:0.1
+          command: [python, -m, agent_lab.worker]
+          envFrom: [{secretRef: {name: agent-secrets}}]
+          env:
+            - {name: PROJECT_CONFIG, value: /etc/agent/projects.yaml}
+          resources: {requests: {cpu: 250m, memory: 512Mi}, limits: {cpu: '2', memory: 2Gi}}
+          securityContext: {allowPrivilegeEscalation: false, readOnlyRootFilesystem: true, capabilities: {drop: [ALL]}}
+          volumeMounts: [{name: config, mountPath: /etc/agent, readOnly: true}, {name: workspaces, mountPath: /app/workspaces}, {name: tmp, mountPath: /tmp}]
+      volumes:
+        - {name: config, configMap: {name: agent-config}}
+        - {name: workspaces, emptyDir: {sizeLimit: 4Gi}}
+        - {name: tmp, emptyDir: {sizeLimit: 256Mi}}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: litellm
+spec:
+  replicas: 1
+  selector:
+    matchLabels: {app: unit-test-litellm}
+  template:
+    metadata:
+      labels: {app: unit-test-litellm}
+    spec:
+      automountServiceAccountToken: false
+      securityContext: {runAsNonRoot: true, runAsUser: 10001, seccompProfile: {type: RuntimeDefault}}
+      containers:
+        - name: proxy
+          image: registry.example.invalid/unit-test-agent-proxy:0.1
+          command: [litellm, --config, /etc/proxy/litellm.yaml, --port, '4000', --num_workers, '1']
+          envFrom: [{secretRef: {name: model-secrets}}]
+          ports: [{containerPort: 4000}]
+          resources: {requests: {cpu: 100m, memory: 512Mi}, limits: {cpu: '2', memory: 2Gi}}
+          securityContext: {allowPrivilegeEscalation: false, capabilities: {drop: [ALL]}}
+          volumeMounts: [{name: config, mountPath: /etc/proxy, readOnly: true}]
+      volumes:
+        - {name: config, configMap: {name: litellm-config}}

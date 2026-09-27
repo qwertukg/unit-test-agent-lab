@@ -1,0 +1,15 @@
+============================= test session starts =============================
+platform win32 -- Python 3.13.7, pytest-9.1.1, pluggy-1.6.0
+rootdir: D:\Projects\unit-test-agent-lab-handoff\unit-test-agent-lab
+configfile: pyproject.toml
+plugins: anyio-4.15.1, langsmith-0.14.1, cov-7.1.0
+collected 1 item
+
+tests\test_baseline.py .                                                 [100%]
+
+- generated xml file: D:\Projects\unit-test-agent-lab-handoff\unit-test-agent-lab\.state\local-demos\python-41c4a10a\reports\junit.xml -
+=============================== tests coverage ================================
+_______________ coverage: platform win32, python 3.13.7-final-0 _______________
+
+Coverage XML written to file reports/coverage.xml
+============================== 1 passed in 0.27s ==============================

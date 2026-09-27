@@ -1,0 +1,23 @@
+workflow:
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "push"'
+    - when: never
+variables:
+  GIT_DEPTH: "0"
+unit:
+  image: unit-test-agent-ci:0.1
+  tags: [unit-test-lab]
+  script:
+    - python .agent-ci.py
+  timeout: 10m
+  artifacts:
+    when: always
+    expire_in: 30 days
+    paths:
+      - reports/
+      - target/surefire-reports/
+      - target/site/jacoco/
+    reports:
+      junit:
+        - reports/junit.xml
+        - target/surefire-reports/TEST-*.xml

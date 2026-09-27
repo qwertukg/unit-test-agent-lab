@@ -1,0 +1,67 @@
+flowchart TB
+    subgraph LEGEND["Легенда"]
+        direction TB
+        L1["действие: вызов"] --> L2["сервис: получатель"]
+        L3[/"объекты: сохранённые данные"/] -.-> L4["действие: чтение"]
+        L5{"условие: выбор"} -->|"Да"| L6(["событие: завершение"])
+    end
+    subgraph HOST["Локальный компьютер — Docker Compose"]
+        direction TB
+        GL["сервис: 1. GitLab
+Демонстрационные проекты, CI, MR"]
+        RUNNER["исполнитель: 2. GitLab Runner
+Сборка, unit-тесты, coverage"]
+        DIND["исполнитель: 2.1. Отдельный TLS DinD
+privileged учебный daemon; не production sandbox"]
+        APP["сервис: 3. Python + FastAPI + LangGraph
+Analyst → Coder → Reviewer"]
+        DB[("хранилище: 4. PostgreSQL
+Состояние, checkpoints, события")]
+        ART[/"объекты: 5. Версии O1 Diff, O2 TestReport,
+O3 Coverage, O4 Task, O5 Repo, O6 Scenarios,
+O7 Tests, O8 Review, O9 Feedback"/]
+        PROXY["сервис: 6. LiteLLM Proxy"]
+        subgraph GATEWAYS["7. Эмуляция API трёх серверов моделей"]
+            direction TB
+            G1["сервис: 7.1. spark-1 gateway"]
+            G2["сервис: 7.2. spark-2 gateway"]
+            G3["сервис: 7.3. spark-3 gateway"]
+        end
+        TASK["адаптер: 8. Задача
+Demo fixture или разрешённый YouTrack"]
+        GL -->|"События CI и MR"| APP
+        GL -->|"Jobs"| RUNNER
+        RUNNER -->|"TLS; job без socket/certificates"| DIND
+        RUNNER -->|"Отчёты и статусы"| GL
+        APP -->|"Создание и обновление MR тестов"| GL
+        APP -->|"Состояние"| DB
+        APP -->|"Версии"| ART
+        ART -.-> APP
+        TASK -.-> APP
+        APP -->|"Вызовы моделей"| PROXY
+        PROXY --> G1
+        PROXY --> G2
+        PROXY --> G3
+    end
+    CLOUD["внешний сервис: 9. Облачная модель
+Провайдер, model ID и ключ ещё не заданы"]
+    G1 --> CLOUD
+    G2 --> CLOUD
+    G3 --> CLOUD
+    subgraph TARGET["10. Перенос — изменение конфигурации endpoints и развёртывания"]
+        direction TB
+        K8S["серверы: 10.1. Существующий Kubernetes
+Agent service и LiteLLM"]
+        EXTDB[("хранилище: 10.2. Внешняя PostgreSQL")]
+        SPARK["серверы: 10.3. Три независимых DGX Spark
+По 128 ГБ; SGLang + модель после проверки"]
+        K8S --> EXTDB
+        K8S --> SPARK
+    end
+    HOST -.->|"Перенос после локальной приёмки"| TARGET
+    classDef objects fill:#fff1b8,stroke:#ad6800,color:#382000
+    classDef service fill:#e6f4ff,stroke:#1677ff,color:#002c61
+    classDef condition fill:#fff0f6,stroke:#c41d7f,color:#520339
+    class L3,ART objects
+    class L1,L2,L4,GL,RUNNER,DIND,APP,DB,PROXY,G1,G2,G3,TASK,CLOUD,K8S,EXTDB,SPARK service
+    class L5 condition

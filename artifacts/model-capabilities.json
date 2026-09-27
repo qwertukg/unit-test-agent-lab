@@ -1,0 +1,22 @@
+{
+  "mode": "real local MTPLX model; no mock",
+  "base_url": "http://192.168.0.155:8000/v1",
+  "model": "mtplx-qwen36-27b-optimized-quality",
+  "models_http": 200,
+  "json_mode_http": 400,
+  "json_mode_error": "response_format type 'json_object' requires the optional llguidance dependency (pip install llguidance); refusing to silently return unconstrained output",
+  "tool_probe": {
+    "status": "ReadTimeout",
+    "timeout_seconds": 120
+  },
+  "minimal_probe": {
+    "status": "ReadTimeout",
+    "timeout_seconds": 60
+  },
+  "ar_probe": {
+    "status": "ReadTimeout",
+    "timeout_seconds": 60
+  },
+  "worker_started": false,
+  "status": "blocked"
+}

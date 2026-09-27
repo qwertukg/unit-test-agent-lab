@@ -1,0 +1,86 @@
+[INFO] Scanning for projects...
+[INFO] 
+[INFO] ----------------------------< lab:pricing >-----------------------------
+[INFO] Building pricing 1.0.0
+[INFO]   from pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- clean:3.4.1:clean (default-clean) @ pricing ---
+[INFO] Deleting D:\Projects\unit-test-agent-lab-handoff\unit-test-agent-lab\.state\local-demos\java-18074e96\target
+[INFO] 
+[INFO] --- jacoco:0.8.13:prepare-agent (default) @ pricing ---
+[INFO] argLine set to -javaagent:C:\\Users\\danii\\.m2\\repository\\org\\jacoco\\org.jacoco.agent\\0.8.13\\org.jacoco.agent-0.8.13-runtime.jar=destfile=D:\\Projects\\unit-test-agent-lab-handoff\\unit-test-agent-lab\\.state\\local-demos\\java-18074e96\\target\\jacoco.exec
+[INFO] 
+[INFO] --- resources:3.3.1:resources (default-resources) @ pricing ---
+[INFO] skip non existing resourceDirectory D:\Projects\unit-test-agent-lab-handoff\unit-test-agent-lab\.state\local-demos\java-18074e96\src\main\resources
+[INFO] 
+[INFO] --- compiler:3.14.0:compile (default-compile) @ pricing ---
+[INFO] Recompiling the module because of changed source code.
+[INFO] Compiling 1 source file with javac [debug release 17] to target\classes
+[INFO] 
+[INFO] --- resources:3.3.1:testResources (default-testResources) @ pricing ---
+[INFO] skip non existing resourceDirectory D:\Projects\unit-test-agent-lab-handoff\unit-test-agent-lab\.state\local-demos\java-18074e96\src\test\resources
+[INFO] 
+[INFO] --- compiler:3.14.0:testCompile (default-testCompile) @ pricing ---
+[INFO] Recompiling the module because of changed dependency.
+[INFO] Compiling 2 source files with javac [debug release 17] to target\test-classes
+[INFO] 
+[INFO] --- surefire:3.5.4:test (default-test) @ pricing ---
+[INFO] Using auto detected provider org.apache.maven.surefire.junitplatform.JUnitPlatformProvider
+[INFO] 
+[INFO] -------------------------------------------------------
+[INFO]  T E S T S
+[INFO] -------------------------------------------------------
+[INFO] Running lab.AgentPricingTest
+[ERROR] Tests run: 9, Failures: 2, Errors: 0, Skipped: 0, Time elapsed: 0.124 s <<< FAILURE! -- in lab.AgentPricingTest
+[ERROR] lab.AgentPricingTest.memberThreshold -- Time elapsed: 0.058 s <<< FAILURE!
+org.opentest4j.AssertionFailedError: expected: <9500> but was: <10000>
+	at org.junit.jupiter.api.AssertionFailureBuilder.build(AssertionFailureBuilder.java:151)
+	at org.junit.jupiter.api.AssertionFailureBuilder.buildAndThrow(AssertionFailureBuilder.java:132)
+	at org.junit.jupiter.api.AssertEquals.failNotEqual(AssertEquals.java:197)
+	at org.junit.jupiter.api.AssertEquals.assertEquals(AssertEquals.java:150)
+	at org.junit.jupiter.api.AssertEquals.assertEquals(AssertEquals.java:145)
+	at org.junit.jupiter.api.Assertions.assertEquals(Assertions.java:531)
+	at lab.AgentPricingTest.memberThreshold(AgentPricingTest.java:9)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:577)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1511)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1511)
+
+[ERROR] lab.AgentPricingTest.combined -- Time elapsed: 0.003 s <<< FAILURE!
+org.opentest4j.AssertionFailedError: expected: <8500> but was: <9000>
+	at org.junit.jupiter.api.AssertionFailureBuilder.build(AssertionFailureBuilder.java:151)
+	at org.junit.jupiter.api.AssertionFailureBuilder.buildAndThrow(AssertionFailureBuilder.java:132)
+	at org.junit.jupiter.api.AssertEquals.failNotEqual(AssertEquals.java:197)
+	at org.junit.jupiter.api.AssertEquals.assertEquals(AssertEquals.java:150)
+	at org.junit.jupiter.api.AssertEquals.assertEquals(AssertEquals.java:145)
+	at org.junit.jupiter.api.Assertions.assertEquals(Assertions.java:531)
+	at lab.AgentPricingTest.combined(AgentPricingTest.java:11)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:577)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1511)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1511)
+
+[INFO] Running lab.PricingTest
+[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.005 s -- in lab.PricingTest
+[INFO] 
+[INFO] Results:
+[INFO] 
+[ERROR] Failures: 
+[ERROR]   AgentPricingTest.combined:11 expected: <8500> but was: <9000>
+[ERROR]   AgentPricingTest.memberThreshold:9 expected: <9500> but was: <10000>
+[INFO] 
+[ERROR] Tests run: 10, Failures: 2, Errors: 0, Skipped: 0
+[INFO] 
+[ERROR] There are test failures.
+
+See D:\Projects\unit-test-agent-lab-handoff\unit-test-agent-lab\.state\local-demos\java-18074e96\target\surefire-reports for the individual test results.
+See dump files (if any exist) [date].dump, [date]-jvmRun[N].dump and [date].dumpstream.
+[INFO] 
+[INFO] --- jacoco:0.8.13:report (report) @ pricing ---
+[INFO] Loading execution data file D:\Projects\unit-test-agent-lab-handoff\unit-test-agent-lab\.state\local-demos\java-18074e96\target\jacoco.exec
+[INFO] Analyzed bundle 'pricing' with 1 classes
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  4.030 s
+[INFO] Finished at: 2026-09-27T14:26:41+05:00
+[INFO] ------------------------------------------------------------------------

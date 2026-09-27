@@ -1,0 +1,10 @@
+{
+  "status": "passed",
+  "mode": "actual PostgreSQL container restart and API recreation, not worker/CI restart",
+  "run_ids": [
+    "1e03c794d2dcb9da14d6da1a079b2d0c",
+    "3da9cefaf4f68bb47c09a6292b36e86f"
+  ],
+  "not_started_deadline": true,
+  "model_calls": 0
+}

@@ -1,0 +1,152 @@
+[
+  {
+    "stack": "python",
+    "mode": "local actual execution, handwritten tests, no GitLab/cloud",
+    "workspace": "D:\\Projects\\unit-test-agent-lab-handoff\\unit-test-agent-lab\\.state\\local-demos\\python-41c4a10a",
+    "before": {
+      "schema_version": 1,
+      "sha": "6b213c008dd6e296e9db24f15dec8e9a89aa7a30",
+      "source_sha": "6b213c008dd6e296e9db24f15dec8e9a89aa7a30",
+      "pipeline_id": 1,
+      "job_id": 1,
+      "status": "passed",
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "coverage": 66.66666666666666,
+      "diff_coverage": 62.5,
+      "threshold": 80,
+      "metric": "diff_line",
+      "gate": "failed",
+      "junit_paths": [
+        "reports/junit.xml"
+      ],
+      "coverage_path": "reports/coverage.xml",
+      "log_path": "reports/run.log",
+      "tool": "cobertura",
+      "created_at": "2026-09-27T09:26:07.409768+00:00"
+    },
+    "after": {
+      "schema_version": 1,
+      "sha": "4341796098efd5702dc7ef89b64216389fe344d2",
+      "source_sha": "6b213c008dd6e296e9db24f15dec8e9a89aa7a30",
+      "pipeline_id": 2,
+      "job_id": 2,
+      "status": "passed",
+      "tests": 11,
+      "failures": 0,
+      "errors": 0,
+      "coverage": 100.0,
+      "diff_coverage": 100.0,
+      "threshold": 80,
+      "metric": "diff_line",
+      "gate": "passed",
+      "junit_paths": [
+        "reports/junit.xml"
+      ],
+      "coverage_path": "reports/coverage.xml",
+      "log_path": "reports/run.log",
+      "tool": "cobertura",
+      "created_at": "2026-09-27T09:26:10.435638+00:00"
+    },
+    "mutation": {
+      "schema_version": 1,
+      "sha": "4341796098efd5702dc7ef89b64216389fe344d2",
+      "source_sha": "6b213c008dd6e296e9db24f15dec8e9a89aa7a30",
+      "pipeline_id": 2,
+      "job_id": 2,
+      "status": "assertion_failure",
+      "tests": 11,
+      "failures": 2,
+      "errors": 0,
+      "coverage": 88.88888888888889,
+      "diff_coverage": 87.5,
+      "threshold": 80,
+      "metric": "diff_line",
+      "gate": "passed",
+      "junit_paths": [
+        "reports/junit.xml"
+      ],
+      "coverage_path": "reports/coverage.xml",
+      "log_path": "reports/run.log",
+      "tool": "cobertura",
+      "created_at": "2026-09-27T09:26:13.305644+00:00"
+    }
+  },
+  {
+    "stack": "java",
+    "mode": "local actual execution, handwritten tests, no GitLab/cloud",
+    "workspace": "D:\\Projects\\unit-test-agent-lab-handoff\\unit-test-agent-lab\\.state\\local-demos\\java-18074e96",
+    "before": {
+      "schema_version": 1,
+      "sha": "9ecf33fd679a58e65a632e1738809e5b4343e8b3",
+      "source_sha": "9ecf33fd679a58e65a632e1738809e5b4343e8b3",
+      "pipeline_id": 1,
+      "job_id": 1,
+      "status": "passed",
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "coverage": 66.66666666666666,
+      "diff_coverage": 62.5,
+      "threshold": 80,
+      "metric": "diff_line",
+      "gate": "failed",
+      "junit_paths": [
+        "target/surefire-reports/TEST-lab.PricingTest.xml"
+      ],
+      "coverage_path": "target/site/jacoco/jacoco.xml",
+      "log_path": "reports/run.log",
+      "tool": "jacoco",
+      "created_at": "2026-09-27T09:26:29.640848+00:00"
+    },
+    "after": {
+      "schema_version": 1,
+      "sha": "65f0cb9520723855526d39eef314da6822b38882",
+      "source_sha": "9ecf33fd679a58e65a632e1738809e5b4343e8b3",
+      "pipeline_id": 2,
+      "job_id": 2,
+      "status": "passed",
+      "tests": 10,
+      "failures": 0,
+      "errors": 0,
+      "coverage": 100.0,
+      "diff_coverage": 100.0,
+      "threshold": 80,
+      "metric": "diff_line",
+      "gate": "passed",
+      "junit_paths": [
+        "target/surefire-reports/TEST-lab.AgentPricingTest.xml",
+        "target/surefire-reports/TEST-lab.PricingTest.xml"
+      ],
+      "coverage_path": "target/site/jacoco/jacoco.xml",
+      "log_path": "reports/run.log",
+      "tool": "jacoco",
+      "created_at": "2026-09-27T09:26:35.805017+00:00"
+    },
+    "mutation": {
+      "schema_version": 1,
+      "sha": "65f0cb9520723855526d39eef314da6822b38882",
+      "source_sha": "9ecf33fd679a58e65a632e1738809e5b4343e8b3",
+      "pipeline_id": 2,
+      "job_id": 2,
+      "status": "assertion_failure",
+      "tests": 10,
+      "failures": 2,
+      "errors": 0,
+      "coverage": 88.88888888888889,
+      "diff_coverage": 87.5,
+      "threshold": 80,
+      "metric": "diff_line",
+      "gate": "passed",
+      "junit_paths": [
+        "target/surefire-reports/TEST-lab.AgentPricingTest.xml",
+        "target/surefire-reports/TEST-lab.PricingTest.xml"
+      ],
+      "coverage_path": "target/site/jacoco/jacoco.xml",
+      "log_path": "reports/run.log",
+      "tool": "jacoco",
+      "created_at": "2026-09-27T09:26:41.836559+00:00"
+    }
+  }
+]
