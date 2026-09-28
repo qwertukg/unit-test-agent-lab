@@ -19,6 +19,7 @@ x-agent-env: &agent-env
   MAX_MODEL_CALLS: ${MAX_MODEL_CALLS:-32}
   MAX_ITERATIONS: ${MAX_ITERATIONS:-4}
   MAX_RUN_SECONDS: ${MAX_RUN_SECONDS:-3600}
+  MAX_EXTERNAL_ATTEMPTS: ${MAX_EXTERNAL_ATTEMPTS:-3}
   PROJECT_CONFIG: /app/config/projects.yaml
 
 x-gateway: &gateway

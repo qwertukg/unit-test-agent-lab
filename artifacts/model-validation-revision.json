@@ -1,0 +1,7 @@
+{
+  "project_id": 1,
+  "mr_iid": 1,
+  "previous_sha": "10d20faa826e1903ddea0d91d9475a3dcbf15e2a",
+  "source_sha": "22952db4602257483cfbb3050254cf2a0537f425",
+  "reason": "Validate corrected final-answer tool loop with real CI; preserve previous stopped run and budgets."
+}

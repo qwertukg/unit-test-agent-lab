@@ -1,5 +1,7 @@
 # Эксплуатация
 
+Для MTPLX без native JSON используется явный `MODEL_JSON_MODE=prompt`: schema остаётся обязательной. Один запрос исправления формата допускается в оставшемся бюджете, повторно невалидный итог останавливает run. В `json_object` дополнительно отправляется response_format. Проверка совместимости: `docker compose --env-file .env --env-file config/images.env exec -T litellm python -m agent_lab.probe`. Применение изменённого .env требует пересоздания сервисов; `restart` не перечитывает environment. У уже остановленного run сохраняются token/call/time budgets; `resume` не начинает deadline заново. MAX_EXTERNAL_ATTEMPTS ограничивает повтор узла, включая resume; эта настройка передаётся в API/worker через Compose.
+
 ## Процесс и данные
 
 Webhook проверяет secret/project и сохраняет событие в PostgreSQL. Worker перечитывает канонический GitLab API. Polling восстанавливает потерянные события и читает award emoji; это не scheduled генерация. Обычный запуск — только согласованные свежие CI-отчёты с failed unit coverage gate, пройденными тестами и разрешённым source MR.

@@ -64,6 +64,7 @@ def main():
     parser.add_argument("--restart", action="store_true", help="Restart only this lab's worker during an existing verification pipeline")
     parser.add_argument("--mutation", action="store_true", help="Check generated tests catch a known defect on a separate synthetic branch")
     parser.add_argument("--timeout", type=int, default=1800)
+    parser.add_argument("--run-id", action="append", default=[], help="Validate only these runs; explicitly partial acceptance")
     args = parser.parse_args()
     env = dotenv_values(".env")
     api = httpx.Client(base_url="http://localhost:8000", headers={"Authorization": "Bearer " + env["API_TOKEN"]}, timeout=20)
@@ -74,6 +75,8 @@ def main():
         response = api.get("/runs")
         response.raise_for_status()
         runs = response.json()
+        if args.run_id:
+            runs = [r for r in runs if r["id"] in args.run_id]
         if args.restart and restart is None:
             for run in runs:
                 if run["status"] not in ("running", "waiting"):
@@ -96,12 +99,14 @@ def main():
         if stopped:
             raise SystemExit("Real run stopped; inspect authenticated /runs: " + ", ".join(r["id"] for r in stopped))
         completed = [r for r in runs if r["status"] == "published"]
-        if len({r["project_id"] for r in completed}) >= 2:
+        if ((args.run_id and {r["id"] for r in completed} == set(args.run_id))
+                or (not args.run_id and len({r["project_id"] for r in completed}) >= 2)):
             break
         time.sleep(5)
     else:
         raise SystemExit("Timed out waiting for real cloud/GitLab E2E")
     result = {"mode": "real " + (env.get("MODEL_MODE") or "cloud") + " model and real GitLab",
+              "scope": "selected runs only; partial acceptance" if args.run_id else "both demo projects",
               "runs": [], "restart": restart, "feedback": None}
     result["mutations"] = []
     runtime_gl = httpx.Client(base_url="http://localhost:8929/api/v4/", headers={"PRIVATE-TOKEN": env["GITLAB_TOKEN"]}, timeout=30)
@@ -154,8 +159,9 @@ def main():
         after = gl.get(f"projects/{run['project_id']}/merge_requests", params={"source_branch": test_mr["source_branch"], "state": "opened"}).json()
         assert len(after) == 1 and after[0]["iid"] == test_mr["iid"]
         result["feedback"] = {"award_id": award.json()["id"], "test_mr_iid": test_mr["iid"], "runs": newer}
-    Path("artifacts/cloud-acceptance.json").write_text(json.dumps(result, indent=2))
-    print("Recorded actual evidence in artifacts/cloud-acceptance.json. No MR was merged.")
+    output = Path("artifacts/partial-acceptance.json" if args.run_id else "artifacts/cloud-acceptance.json")
+    output.write_text(json.dumps(result, indent=2))
+    print(f"Recorded actual evidence in {output}. No MR was merged.")
 
 
 if __name__ == "__main__":

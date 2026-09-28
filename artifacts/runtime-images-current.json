@@ -1,0 +1,105 @@
+{
+  "checked_date": "2026-09-28",
+  "images": [
+    {
+      "ID": "sha256:a4838319e55b510c05b36d701d06362b9197458558c7b0d3d63f2c7588c7cd2f",
+      "ContainerName": "unit-test-agent-lab-runner-1",
+      "Repository": "gitlab/gitlab-runner",
+      "Tag": "",
+      "Platform": "linux/amd64",
+      "Size": 307585351,
+      "Created": "2026-09-16T16:08:06.361995025Z",
+      "LastTagTime": "2026-09-27T14:43:22.489789671Z"
+    },
+    {
+      "ID": "sha256:05af3f980e357b3a89b0adfea36c54abdc5d099f1e7001e76853c04bbefe0baf",
+      "ContainerName": "unit-test-agent-lab-spark-3-1",
+      "Repository": "unit-test-agent-proxy",
+      "Tag": "0.1",
+      "Platform": "linux/amd64",
+      "Size": 1961462177,
+      "Created": "2026-09-27T21:01:27.054972007Z",
+      "LastTagTime": "2026-09-27T21:02:15.590652556Z"
+    },
+    {
+      "ID": "sha256:05af3f980e357b3a89b0adfea36c54abdc5d099f1e7001e76853c04bbefe0baf",
+      "ContainerName": "unit-test-agent-lab-spark-1-1",
+      "Repository": "unit-test-agent-proxy",
+      "Tag": "0.1",
+      "Platform": "linux/amd64",
+      "Size": 1961462177,
+      "Created": "2026-09-27T21:01:27.054972007Z",
+      "LastTagTime": "2026-09-27T21:02:15.590652556Z"
+    },
+    {
+      "ID": "sha256:9b33b45b9f42d176bada85ee5ecb81ddab7e506c435f44cd582206e284b2809c",
+      "ContainerName": "unit-test-agent-lab-gitlab-1",
+      "Repository": "gitlab/gitlab-ce",
+      "Tag": "",
+      "Platform": "linux/amd64",
+      "Size": 5638373519,
+      "Created": "2026-09-22T12:55:57.873797738Z",
+      "LastTagTime": "2026-09-27T14:31:04.594799867Z"
+    },
+    {
+      "ID": "sha256:4ddbeeb150c951bc0c5c119985873919e1739dd7d0d3043a3725f07daf05882c",
+      "ContainerName": "unit-test-agent-lab-worker-1",
+      "Repository": "unit-test-agent",
+      "Tag": "0.1",
+      "Platform": "linux/amd64",
+      "Size": 577772497,
+      "Created": "2026-09-28T03:25:13.686740328Z",
+      "LastTagTime": "2026-09-28T03:25:21.454868469Z"
+    },
+    {
+      "ID": "sha256:639ab7ceb90e13123085b741fb31ef493fba25463002f6da665352e7b534b652",
+      "ContainerName": "unit-test-agent-lab-postgres-1",
+      "Repository": "postgres",
+      "Tag": "",
+      "Platform": "linux/amd64",
+      "Size": 619582489,
+      "Created": "2026-09-19T00:36:52.480117286Z",
+      "LastTagTime": "2026-09-27T14:26:28.228857026Z"
+    },
+    {
+      "ID": "sha256:05af3f980e357b3a89b0adfea36c54abdc5d099f1e7001e76853c04bbefe0baf",
+      "ContainerName": "unit-test-agent-lab-litellm-1",
+      "Repository": "unit-test-agent-proxy",
+      "Tag": "0.1",
+      "Platform": "linux/amd64",
+      "Size": 1961462177,
+      "Created": "2026-09-27T21:01:27.054972007Z",
+      "LastTagTime": "2026-09-27T21:02:15.590652556Z"
+    },
+    {
+      "ID": "sha256:ea9d20492ca1caaaba78e68453433895d256173c79281756e88b745647fcbcfd",
+      "ContainerName": "unit-test-agent-lab-dind-1",
+      "Repository": "docker",
+      "Tag": "",
+      "Platform": "linux/amd64",
+      "Size": 559947570,
+      "Created": "2025-11-01T00:11:14.070354393Z",
+      "LastTagTime": "2026-09-27T14:26:59.570830374Z"
+    },
+    {
+      "ID": "sha256:05af3f980e357b3a89b0adfea36c54abdc5d099f1e7001e76853c04bbefe0baf",
+      "ContainerName": "unit-test-agent-lab-spark-2-1",
+      "Repository": "unit-test-agent-proxy",
+      "Tag": "0.1",
+      "Platform": "linux/amd64",
+      "Size": 1961462177,
+      "Created": "2026-09-27T21:01:27.054972007Z",
+      "LastTagTime": "2026-09-27T21:02:15.590652556Z"
+    },
+    {
+      "ID": "sha256:4ddbeeb150c951bc0c5c119985873919e1739dd7d0d3043a3725f07daf05882c",
+      "ContainerName": "unit-test-agent-lab-api-1",
+      "Repository": "unit-test-agent",
+      "Tag": "0.1",
+      "Platform": "linux/amd64",
+      "Size": 577772497,
+      "Created": "2026-09-28T03:25:13.686740328Z",
+      "LastTagTime": "2026-09-28T03:25:21.454868469Z"
+    }
+  ]
+}

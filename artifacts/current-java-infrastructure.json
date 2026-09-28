@@ -1,0 +1,37 @@
+{
+  "scope": "current Java only",
+  "model_calls": 0,
+  "source_sha": "22952db4602257483cfbb3050254cf2a0537f425",
+  "pipeline_id": 43,
+  "job_id": 43,
+  "bot_admin": false,
+  "unauthenticated_requests_rejected": true,
+  "report": {
+    "schema_version": 1,
+    "sha": "22952db4602257483cfbb3050254cf2a0537f425",
+    "source_sha": "22952db4602257483cfbb3050254cf2a0537f425",
+    "pipeline_id": 43,
+    "job_id": 43,
+    "status": "passed",
+    "tests": 1,
+    "failures": 0,
+    "errors": 0,
+    "coverage": 66.66666666666666,
+    "diff_coverage": 62.5,
+    "threshold": 80.0,
+    "metric": "diff_line",
+    "gate": "failed",
+    "junit_paths": [
+      "target/surefire-reports/TEST-lab.PricingTest.xml"
+    ],
+    "coverage_path": "target/site/jacoco/jacoco.xml",
+    "log_path": "reports/run.log",
+    "tool": "jacoco",
+    "created_at": "2026-09-28T03:06:34.611431+00:00"
+  },
+  "artifacts": [
+    "target/surefire-reports/TEST-lab.PricingTest.xml",
+    "target/site/jacoco/jacoco.xml",
+    "reports/run.log"
+  ]
+}

@@ -38,13 +38,13 @@ Demo fixture или разрешённый YouTrack"]
         APP -->|"Версии"| ART
         ART -.-> APP
         TASK -.-> APP
-        APP -->|"Вызовы моделей"| PROXY
+        APP -->|"Tools + JSON: native или prompt; строгая schema"| PROXY
         PROXY --> G1
         PROXY --> G2
         PROXY --> G3
     end
-    CLOUD["внешний сервис: 9. Облачная модель
-Провайдер, model ID и ключ ещё не заданы"]
+    CLOUD["внешний сервис: 9. Настроенная модель
+Текущий стенд: локальный MTPLX; также поддерживается облако"]
     G1 --> CLOUD
     G2 --> CLOUD
     G3 --> CLOUD

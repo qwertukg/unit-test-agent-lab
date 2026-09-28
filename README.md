@@ -1,10 +1,10 @@
 # Unit Test Agent Lab
 
-Последняя повторная проверка: `192.168.0.155:8000` сейчас недоступен из Windows и Docker на уровне TCP. Нужен актуальный доступный адрес API; предыдущие результаты MTPLX ниже не подтверждают его текущее состояние. См. [model-recheck.json](artifacts/model-recheck.json).
+Последняя проверка 28.09: актуальный MTPLX `192.168.0.105:8000` прошёл все 12 реальных JSON/tool запросов через три шлюза и LiteLLM в режиме `prompt`. См. [model-probe-current.json](artifacts/model-probe-current.json).
 
 Реализован стенд **Analyst → Coder → GitLab Runner → Reviewer**: Python/FastAPI/LangGraph, PostgreSQL, LiteLLM, три облачных API-шлюза, два синтетических продукта Java/Python, очередь/checkpoints и проверки политики.
 
-**Docker-стенд запущен:** GitLab, online Runner, PostgreSQL, API, LiteLLM и три шлюза. В обоих demo настоящие CI jobs подтвердили coverage fail 62.5%; два run стоят в долговечной очереди, повторные события не создали дубликатов. Пользователь подключил локальную модель MTPLX через `.env`. **Полный цикл пока blocked:** сервер модели отклоняет JSON mode (отсутствует `llguidance`), запросы генерации завершились timeout; worker выключен. [VALIDATION.md](VALIDATION.md) содержит свидетельства.
+**Docker-стенд запущен:** GitLab, Runner, PostgreSQL, API, worker, LiteLLM и три шлюза. Ранее в обоих demo настоящие CI jobs подтвердили coverage fail 62.5%. Сейчас в пользовательской конфигурации включён только Java-проект. Предыдущий Analyst остановился по лимиту tool steps; исправлен запрос итогового ответа в последнем разрешённом шаге. Полный цикл с созданием MR пока не подтверждён. [VALIDATION.md](VALIDATION.md) содержит свидетельства.
 
 ## Запуск
 
@@ -22,9 +22,12 @@ python -m venv .venv
 Для выбранного пользователем локального OpenAI-compatible сервера уже выставлено:
 
 ```dotenv
-CLOUD_BASE_URL=http://192.168.0.155:8000/v1
-CLOUD_MODEL=openai/mtplx-qwen36-27b-optimized-quality
+CLOUD_BASE_URL=http://192.168.0.105:8000/v1
+CLOUD_MODEL=openai/mtplx-qwen36-27b-optimized-speed
 MODEL_MODE=local
+MODEL_JSON_MODE=prompt
+MODEL_TIMEOUT=360
+UPSTREAM_TIMEOUT_SECONDS=300
 TOKEN_PRICE_UPPER_USD=0
 ```
 
@@ -49,7 +52,9 @@ Bootstrap ограничен `localhost:8929`: создаёт только из�
 | `http://localhost:8000/runs` | Runs; `Authorization: Bearer <API_TOKEN>` |
 | `http://localhost:4000/v1` | LiteLLM; ключ `MODEL_API_KEY` |
 
-Эти адреса проверены на работающем стенде. Исходные MR: [Java](http://localhost:8929/root/unit-test-agent-demo-java/-/merge_requests/1), [Python](http://localhost:8929/root/unit-test-agent-demo-python/-/merge_requests/1). Внутренний GitLab URL и clone_url Runner — `http://gitlab:8929`. PostgreSQL, DinD и gateways на хост не публикуются. Bootstrap сохранит проекты, остановит worker на время перенастройки и включит его только после реальных JSON/tool probes. На текущем сервере сначала требуется исправить JSON support и доступность генерации.
+Эти адреса проверены на работающем стенде. Исходные MR: [Java](http://localhost:8929/root/unit-test-agent-demo-java/-/merge_requests/1), [Python](http://localhost:8929/root/unit-test-agent-demo-python/-/merge_requests/1). Внутренний GitLab URL и clone_url Runner — `http://gitlab:8929`. PostgreSQL, DinD и gateways на хост не публикуются. Bootstrap остановит worker на время перенастройки и включит его только после реальных JSON/tool probes. Он заново формирует конфигурацию обоих demo-проектов; при пользовательском выборе одного проекта применяйте адресные Compose команды вместо повторного bootstrap.
+
+`MODEL_JSON_MODE=json_object` требует native JSON от провайдера. Явный `prompt` не отправляет `response_format`: модель получает JSON schema в системном сообщении, результат обязательно проходит строгую Pydantic-проверку. В оставшемся бюджете разрешён один запрос исправления формата; повторная ошибка схемы останавливает run. Автоматического перехода на менее строгую проверку нет. Режим `prompt` позволяет работать без optional `llguidance` на MTPLX.
 
 ## Облачная приёмка
 
@@ -59,6 +64,8 @@ docker compose --env-file .env --env-file config/images.env exec -T litellm pyth
 ```
 
 Probe проверяет реальные tool calls/JSON на всех трёх шлюзах и LiteLLM. Acceptance ожидает два опубликованных run, проверяет O1–O8/usage, на отдельной synthetic mutation-ветке проверяет обнаружение регрессии настоящим Runner, оставляет демонстрационные 👎 и tagged-комментарий от автора и проверяет тот же MR. Product mutation не попадает в MR тестов. Автоматического merge нет. Ссылки MR сохраняются в `artifacts/bootstrap.json`.
+
+Для проверки выбранного запуска при сохранённой истории остановленных runs: `scripts/acceptance.py --run-id <id> --feedback --mutation`. Можно повторить `--run-id`; это явно частичная приёмка с отдельным `artifacts/partial-acceptance.json`, а не выполнение требования двух demo.
 
 ## Локальные проверки
 

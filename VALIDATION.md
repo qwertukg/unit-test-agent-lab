@@ -1,8 +1,10 @@
 # Проверка реализации — обновлено 28.09.2026
 
-**Последняя повторная проверка (01:46 UTC+5):** настроенный адрес `192.168.0.155:8000` не устанавливает TCP-соединение из Windows и Docker. Windows `Test-NetConnection`: TCP=false, ping=`DestinationHostUnreachable`; маршрут идёт напрямую по Wi-Fi `192.168.0.0/24` с адреса `192.168.0.194`. Повторные JSON/tool probes не достигли сервера. Предыдущие ошибки MTPLX ниже — история, их текущее состояние не подтверждено. [Свидетельство](artifacts/model-recheck.json).
+**Текущая проверка:** актуальный MTPLX `.105` / optimized-speed прошёл все 12 настоящих JSON/tool/tool-result requests на трёх gateways и LiteLLM, MODEL_JSON_MODE=prompt. [Свидетельство](artifacts/model-probe-current.json). Native JSON/сетевые ошибки `.155` ниже относятся к ранним проверкам.
 
-**Docker/GitLab/Runner проверены; полный модельный end-to-end не выполнен.** Пользователь подключил локальный MTPLX вместо облака; URL/model/key применены к gateway, MODEL_MODE=local. Сервер отклоняет JSON mode и не завершает generation probes в установленный timeout. Worker выключен, два run ожидают в очереди. Проверки ниже не подменяют невыполненные A01–A22. Статусы: `passed`, `failed`, `blocked`, `not_run`.
+Docker/GitLab/Runner/worker работают. Предыдущий Analyst остановился на tool-step limit; итоговый разрешённый запрос теперь требует final JSON. Java run `a92a9e87c36e564eeaa89f08e88884f2` остановился после 6 ответов Analyst на ошибке schema ([свидетельство](artifacts/model-schema-stop.json)). Добавлен один bounded format repair внутри прежнего бюджета; повтор на новой ревизии проверяется. Python отключён в пользовательском config; лимиты .env сохранены. Полный цикл/MR/feedback/restart пока не подтверждены. Статусы: `passed`, `failed`, `blocked`, `not_run`.
+
+19 тестов затронутых model/workflow компонентов повторно прошли после format repair: [JUnit](artifacts/pytest-model-repair.xml). Ни код ошибки, ни prompt не раскрывают секреты.
 
 ## Выполненные запуски
 
@@ -14,7 +16,7 @@
 | Реальные контейнеры gateway/LiteLLM с пользовательским `.env` | Три health в local mode; authenticated proxy models=200; JSON request через gateway=502 (нормализованный upstream 400). Worker не стартовал | [model connection](artifacts/model-connection.json) |
 | Повтор bootstrap 28.09 с настроенным MTPLX | Ожидаемый blocked/exit 1 на реальном capability probe; worker не запущен, обе записи по-прежнему queued, model_calls=0. Отрицательный сценарий проверки перед стартом подтверждён | [probe](artifacts/model-probe.json) |
 | Portable `initdb`, `pg_ctl`, `createdb` только внутри `.state`, loopback 55432 | passed; настоящая PostgreSQL 17.6, schema/indices и PostgresSaver setup | artifacts/versions.json, artifacts/tool-downloads.json |
-| `$env:TEST_DATABASE_URL='postgresql://lab@127.0.0.1:55432/lab_test'; .venv/Scripts/python -m pytest -q --junitxml=artifacts/pytest.xml` | **passed: 52 tests, 0 failures, 0 skips, 76.58 s** | [JUnit](artifacts/pytest.xml) |
+| `$env:TEST_DATABASE_URL='postgresql://lab@127.0.0.1:55432/lab_test'; .venv/Scripts/python -m pytest -q --junitxml=artifacts/pytest.xml` | **passed: 58 tests, 0 failures, 0 skips, 75.82 s** | [JUnit](artifacts/pytest.xml) |
 | Повтор `tests/test_model_contract.py` после защиты роли ответа провайдера | passed: 1 test, 1.40 s; ответ с role=system преобразуется в assistant в следующем запросе. Также входит в полный набор выше | [JUnit boundary](artifacts/pytest-model-boundary.xml) |
 | `.venv/Scripts/python scripts/bootstrap.py` и повтор bootstrap | passed; GitLab 19.4.1 healthy, Runner 19.4.0 online; ровно два проекта/исходных MR/hooks, один Runner; API/PG/LiteLLM/три gateway запущены. Worker выключен до cloud settings | [bootstrap](artifacts/bootstrap.json), [idempotency](artifacts/bootstrap-idempotency.json), [images](artifacts/runtime-images.json), [packages](artifacts/runtime-packages.json) |
 | `.venv/Scripts/python scripts/validate_infrastructure.py` | passed; настоящие Java job/pipeline 2 и Python job/pipeline 4, tests=1/errors=0, diff coverage=62.5%, gate failed; actual SHA/JUnit/coverage/logs проверены. API 401 без токена и 200 с токеном | [infrastructure](artifacts/infrastructure.json) |
@@ -36,8 +38,8 @@
 
 | ID | Независимая локальная проверка | Полная требуемая приёмка | Свидетельство / что осталось |
 |---|---|---|---|
-| A01 | passed | passed | Реальный bootstrap/повтор, healthy инфраструктура и Runner online; worker ожидает успешного model probe, см. A02 |
-| A02 | passed | blocked | Реальный локальный MTPLX задан пользователем вместо облака, но JSON support/generation probes не прошли; mock-only component tests не заменяют это |
+| A01 | passed | passed | Реальный bootstrap/повтор, healthy инфраструктура и Runner online; worker запущен после успешного model probe, см. A02 |
+| A02 | passed | blocked | Реальный локальный MTPLX прошёл 12 capabilities requests в prompt mode; облачный провайдер не используется |
 | A03 | passed | blocked | Настоящий native Proxy + три gateway, один остановлен; контейнеры/реальный cloud failover не проверены |
 | A04 | passed | passed | Оба настоящих source MR: Runner unit tests passed, coverage 62.5% gate fail; реальные webhooks/polling создали durable runs. Исполнение ролей отдельно A06 |
 | A05 | passed | blocked | pass/unknown/infra/build/foreign target/self MR/stale SHA/fork отвергаются; live events не проверены |
@@ -78,8 +80,8 @@ Python 3.13.7, FastAPI 0.141.1, Uvicorn 0.54.0, LangGraph 1.2.12, langgraph-chec
 - CI image теперь строится до записи конфигурации Runner, чтобы pending jobs не стартовали раньше сборки.
 - Runtime deadline перенесён с времени постановки в очередь на сохранённое первое исполнение `started_at`; restart/resume его не сбрасывают. Миграция и regression test прошли.
 
-## Следующий внешний шаг
+## Текущий следующий этап
 
-На сервере пользователя 192.168.0.155 установить недостающий `llguidance` в окружение MTPLX/перезапустить runtime и дождаться либо исправить прогрев/генерацию. У агента нет доступа к окружению этого сервера для установки. После успешных JSON/tool probes повторить bootstrap (включит worker), затем `scripts/acceptance.py --feedback --mutation`; отдельно `--restart` с документированной задержкой CI. Исходные MR/job/pipeline/image IDs сохранены; model-generated test MR пока отсутствует. Пользователь выбрал local model, реальный cloud acceptance этим не подменяется.
+Проверка Java с реальной локальной моделью: `scripts/acceptance.py --run-id a92a9e87c36e564eeaa89f08e88884f2 --restart --feedback --mutation --timeout 7200`. Флаг --run-id явно ограничивает scope выбранными runs; результат пишется в partial-acceptance.json и не заменяет оба demo в полной приёмке. История остановленных runs сохраняется, их бюджеты не сбрасываются.
 
-Для продолжения с этой папкой ничего восстанавливать из чата не требуется. Docker-стенд оставлен работающим, worker выключен, два run queued без расходов. Временные native Proxy/gateway процессы и portable PostgreSQL остановлены; её данные остаются в `.state/pgdata`.
+Установка llguidance для выбранного prompt mode не требуется; строгие схемы результатов обязательны. Model endpoint, конфигурация и артефакты сохранены в папке. Worker работает, авто-слияние MR отключено.

@@ -45,7 +45,9 @@ def execute(settings, store, gitlab, model, project_map, saver, run, owner):
                 lease_until=now()+(%s * interval '1 second'),updated_at=now() WHERE id=%s""",
                         (str(e), settings.poll_seconds, run["id"]))
         except (Blocked, PolicyError, BudgetExceeded, ValidationError) as e:
-            reason = str(e) if not isinstance(e, ValidationError) else "structured model/report validation failed"
+            reason = str(e) if not isinstance(e, ValidationError) else (
+                "structured model/report validation failed: "
+                + ", ".join(sorted({item["type"] for item in e.errors(include_input=False, include_context=False)})))
             status = "cancelled" if store.run(run["id"])["cancel_requested"] else "needs_human"
             store.status(run["id"], status, type(e).__name__ + ": " + reason)
             log.warning("run_id=%s stopped=%s", run["id"], type(e).__name__)

@@ -1,0 +1,16 @@
+{
+  "checked_date": "2026-09-28",
+  "mode": "real local model",
+  "base_url": "http://192.168.0.105:8000/v1",
+  "model": "mtplx-qwen36-27b-optimized-speed",
+  "json_mode": "prompt",
+  "command": "docker compose --env-file .env --env-file config/images.env exec -T litellm python -m agent_lab.probe",
+  "status": "passed",
+  "probes": [
+    {"endpoint": "spark-1", "requests": 3, "tool_call": "passed", "structured_response": "passed", "usage_total_tokens": [232, 714, 474]},
+    {"endpoint": "spark-2", "requests": 3, "tool_call": "passed", "structured_response": "passed", "usage_total_tokens": [179, 708, 253]},
+    {"endpoint": "spark-3", "requests": 3, "tool_call": "passed", "structured_response": "passed", "usage_total_tokens": [257, 665, 218]},
+    {"endpoint": "litellm", "requests": 3, "tool_call": "passed", "structured_response": "passed", "usage_total_tokens": [283, 734, 377]}
+  ],
+  "scope": "Capability check only; full Analyst/Coder/Reviewer workflow is separate. No mocks."
+}

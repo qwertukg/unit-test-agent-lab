@@ -14,6 +14,8 @@ Only read_file, search, list_files tools may be used. No shell or network tools 
 Only add dedicated generated unit tests. Never change production code, existing tests,
 build/CI config, dependencies, thresholds or coverage exclusions. Do not disable tests,
 assertions, or mock the behavior under test. Assertions must derive from requirements.
+Python filenames must be test_agent_*.py; Java filenames must be Agent*Test.java,
+under the project's approved test_paths. Include complete file contents in final JSON.
 Use complete relevant source files, existing tests and dependencies. Cite scenario IDs.
 Failing correct assertions may expose a product defect: preserve evidence, do not weaken
 expectations. Reviewer must assess EACH available O1-O9, real reports and source/test SHA.

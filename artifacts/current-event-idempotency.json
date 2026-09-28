@@ -1,0 +1,8 @@
+{
+  "checked_date": "2026-09-28",
+  "status": "passed",
+  "mode": "real GitLab/PostgreSQL, two poll/drain cycles while model run is active",
+  "before": ["4484c19047de617f53f0f19fba1d59a0", "76a79a987b4a41c974e8e2b700f23075", "a92a9e87c36e564eeaa89f08e88884f2"],
+  "after": ["4484c19047de617f53f0f19fba1d59a0", "76a79a987b4a41c974e8e2b700f23075", "a92a9e87c36e564eeaa89f08e88884f2"],
+  "duplicate_runs": 0
+}

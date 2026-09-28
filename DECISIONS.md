@@ -46,7 +46,7 @@ Python + FastAPI + LangGraph; отдельный LiteLLM Proxy. MCP для GitLa
 
 ## Решения реализации 27.09.2026
 
-- Дополнение 28.09: пользователь подключил внешний локальный MTPLX вместо облака. MODEL_MODE=local, LiteLLM model prefix=openai/, цена 0 разрешена; все остальные лимиты сохранены. Worker включается только после реального capability probe. Текущие блокеры: отсутствие llguidance на сервере и timeout генерации; серверные настройки не менялись.
+- Дополнение 28.09: пользователь подключил внешний локальный MTPLX вместо облака. MODEL_MODE=local, LiteLLM model prefix=openai/, цена 0 разрешена. Новый адрес `.105`, модель optimized-speed и явный MODEL_JSON_MODE=prompt прошли все 12 capability requests. Native JSON ранее требовал llguidance; prompt mode сохраняет строгую проверку схемы на стороне агента и не является автоматическим fallback. Серверные настройки не менялись. Последний разрешённый model request требует final JSON через tool_choice=none; бюджет не расширяется. Пользовательские лимиты .env и отключённый Python-проект сохранены.
 
 - После установки Docker пользователем реально запущены Linux Engine 29.8.0/Compose 5.5.1, GitLab/Runner, API/PostgreSQL/LiteLLM/три gateway. Два исходных MR и CI с coverage fail проверены; облачная модель по-прежнему не выбрана. Ранние записи ниже отражают состояние до установки Docker.
 - Deadline начинается с первого исполнения (`started_at`), сохраняется в PostgreSQL и не сбрасывается при retry/restart/resume; ожидание в очереди не расходует runtime budget. Для ранее исполнявшихся записей миграция консервативно сохраняет старую точку отсчёта `created_at`.
@@ -58,3 +58,5 @@ Python + FastAPI + LangGraph; отдельный LiteLLM Proxy. MCP для GitLa
 - Runner — отдельный TLS DinD, без host socket в agent/model/job. DinD privileged и не считается production sandbox; предпочтительная изоляция всего стенда — отдельная VM/context. Runtime GitLab bot отделён от root bootstrap.
 - Реестр проверен: GitLab CE 19.4.1, Runner 19.4.0 и остальные images закреплены digest в `config/images.env`. Docker runtime пока не проверен. Python dependency lock включает LiteLLM 1.102.1, LangGraph 1.2.12 и PostgresSaver 3.1.2.
 - Полная облачная приёмка, живые MR и Spark не объявляются пройденными. Подробная матрица и артефакты — VALIDATION.md.
+
+- Для schema-invalid final response разрешён один запрос исправления в оставшемся бюджете шагов/токенов/стоимости; tools в этой попытке запрещены. Повторная ошибка останавливает run; schema не ослабляется, Markdown fences автоматически не удаляются. MAX_EXTERNAL_ATTEMPTS передаётся в контейнеры, текущий пользовательский лимит 1 сохранён.

@@ -1,0 +1,232 @@
+{
+  "status": "stopped",
+  "run": {
+    "id": "76a79a987b4a41c974e8e2b700f23075",
+    "project_id": 1,
+    "source_sha": "10d20faa826e1903ddea0d91d9475a3dcbf15e2a",
+    "status": "needs_human",
+    "reason": "BudgetExceeded: model tool-step limit",
+    "started_at": "2026-09-27T23:06:20.430563+00:00",
+    "model_calls": 9,
+    "tokens_used": 309975
+  },
+  "calls": [
+    {
+      "id": 1,
+      "run_id": "76a79a987b4a41c974e8e2b700f23075",
+      "role": "Analyst",
+      "iteration": 0,
+      "endpoint": "spark-1",
+      "model": "test-agent",
+      "latency_ms": 102363,
+      "usage": {
+        "total_tokens": 8479,
+        "prompt_tokens": 8224,
+        "completion_tokens": 255,
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        }
+      },
+      "paths": [],
+      "created_at": "2026-09-27T23:08:04.203322+00:00"
+    },
+    {
+      "id": 2,
+      "run_id": "76a79a987b4a41c974e8e2b700f23075",
+      "role": "Analyst",
+      "iteration": 0,
+      "endpoint": "spark-2",
+      "model": "test-agent",
+      "latency_ms": 88480,
+      "usage": {
+        "total_tokens": 11223,
+        "prompt_tokens": 9270,
+        "completion_tokens": 1953,
+        "prompt_tokens_details": {
+          "cached_tokens": 8312
+        }
+      },
+      "paths": [
+        "pom.xml",
+        "src/main/java/lab/Pricing.java",
+        "src/test/java/lab/PricingTest.java"
+      ],
+      "created_at": "2026-09-27T23:09:32.734578+00:00"
+    },
+    {
+      "id": 3,
+      "run_id": "76a79a987b4a41c974e8e2b700f23075",
+      "role": "Analyst",
+      "iteration": 0,
+      "endpoint": "spark-3",
+      "model": "test-agent",
+      "latency_ms": 287183,
+      "usage": {
+        "total_tokens": 10735,
+        "prompt_tokens": 9632,
+        "completion_tokens": 1103,
+        "prompt_tokens_details": {
+          "cached_tokens": 9632
+        }
+      },
+      "paths": [
+        ".test-agent.json",
+        "pom.xml",
+        "src/main/java/lab/Pricing.java",
+        "src/test/java/lab/PricingTest.java"
+      ],
+      "created_at": "2026-09-27T23:14:19.956581+00:00"
+    },
+    {
+      "id": 4,
+      "run_id": "76a79a987b4a41c974e8e2b700f23075",
+      "role": "Analyst",
+      "iteration": 0,
+      "endpoint": "spark-3",
+      "model": "test-agent",
+      "latency_ms": 37391,
+      "usage": {
+        "total_tokens": 10602,
+        "prompt_tokens": 9724,
+        "completion_tokens": 878,
+        "prompt_tokens_details": {
+          "cached_tokens": 9080
+        }
+      },
+      "paths": [
+        ".test-agent.json",
+        "README.md",
+        "pom.xml",
+        "src/main/java/lab/Pricing.java",
+        "src/test/java/lab/PricingTest.java"
+      ],
+      "created_at": "2026-09-27T23:14:57.397914+00:00"
+    },
+    {
+      "id": 5,
+      "run_id": "76a79a987b4a41c974e8e2b700f23075",
+      "role": "Analyst",
+      "iteration": 0,
+      "endpoint": "spark-1",
+      "model": "test-agent",
+      "latency_ms": 356104,
+      "usage": {
+        "total_tokens": 13121,
+        "prompt_tokens": 9839,
+        "completion_tokens": 3282,
+        "prompt_tokens_details": {
+          "cached_tokens": 9839
+        }
+      },
+      "paths": [
+        ".test-agent.json",
+        "README.md",
+        "pom.xml",
+        "src/main/java/lab/Pricing.java",
+        "src/test/java/lab/PricingTest.java"
+      ],
+      "created_at": "2026-09-27T23:20:53.537626+00:00"
+    },
+    {
+      "id": 6,
+      "run_id": "76a79a987b4a41c974e8e2b700f23075",
+      "role": "Analyst",
+      "iteration": 0,
+      "endpoint": "spark-2",
+      "model": "test-agent",
+      "latency_ms": 200375,
+      "usage": {
+        "total_tokens": 12191,
+        "prompt_tokens": 9909,
+        "completion_tokens": 2282,
+        "prompt_tokens_details": {
+          "cached_tokens": 9909
+        }
+      },
+      "paths": [
+        ".test-agent.json",
+        "README.md",
+        "pom.xml",
+        "src/main/java/lab/Pricing.java",
+        "src/test/java/lab/PricingTest.java"
+      ],
+      "created_at": "2026-09-27T23:24:13.955717+00:00"
+    },
+    {
+      "id": 7,
+      "run_id": "76a79a987b4a41c974e8e2b700f23075",
+      "role": "Analyst",
+      "iteration": 0,
+      "endpoint": "spark-2",
+      "model": "test-agent",
+      "latency_ms": 223847,
+      "usage": {
+        "total_tokens": 12261,
+        "prompt_tokens": 10024,
+        "completion_tokens": 2237,
+        "prompt_tokens_details": {
+          "cached_tokens": 10024
+        }
+      },
+      "paths": [
+        ".test-agent.json",
+        "README.md",
+        "pom.xml",
+        "src/main/java/lab/Pricing.java",
+        "src/test/java/lab/PricingTest.java"
+      ],
+      "created_at": "2026-09-27T23:27:57.845062+00:00"
+    },
+    {
+      "id": 8,
+      "run_id": "76a79a987b4a41c974e8e2b700f23075",
+      "role": "Analyst",
+      "iteration": 0,
+      "endpoint": "spark-1",
+      "model": "test-agent",
+      "latency_ms": 232149,
+      "usage": {
+        "total_tokens": 12785,
+        "prompt_tokens": 10250,
+        "completion_tokens": 2535,
+        "prompt_tokens_details": {
+          "cached_tokens": 10250
+        }
+      },
+      "paths": [
+        ".test-agent.json",
+        "README.md",
+        "pom.xml",
+        "src/main/java/lab/Pricing.java",
+        "src/test/java/lab/PricingTest.java"
+      ],
+      "created_at": "2026-09-27T23:31:50.033964+00:00"
+    },
+    {
+      "id": 9,
+      "run_id": "76a79a987b4a41c974e8e2b700f23075",
+      "role": "Analyst",
+      "iteration": 0,
+      "endpoint": "spark-2",
+      "model": "test-agent",
+      "latency_ms": 193005,
+      "usage": {
+        "total_tokens": 11928,
+        "prompt_tokens": 10365,
+        "completion_tokens": 1563,
+        "prompt_tokens_details": {
+          "cached_tokens": 10365
+        }
+      },
+      "paths": [
+        ".test-agent.json",
+        "README.md",
+        "pom.xml",
+        "src/main/java/lab/Pricing.java",
+        "src/test/java/lab/PricingTest.java"
+      ],
+      "created_at": "2026-09-27T23:35:03.083720+00:00"
+    }
+  ],
+  "history_preserved": true
+}

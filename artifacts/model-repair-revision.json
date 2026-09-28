@@ -1,0 +1,7 @@
+{
+  "project_id": 1,
+  "mr_iid": 1,
+  "previous_sha": "22952db4602257483cfbb3050254cf2a0537f425",
+  "source_sha": "2d93f5a390b0f546e35b69b7bebf2c125903abf5",
+  "reason": "Validate one bounded format correction; no reset of prior runs or budgets."
+}

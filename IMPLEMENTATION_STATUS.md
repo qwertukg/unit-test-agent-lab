@@ -13,14 +13,13 @@
 
 Windows 11 Pro x64, Intel i5-10400 (12 logical CPU), RAM 23.9 GiB. Python 3.13.7, Java 18.0.2.1, Git доступны. Изначально Docker отсутствовал; затем пользователь установил Docker Desktop в профиль пользователя. Реально доступны Linux Engine 29.8.0 и Compose 5.5.1, 12 CPU/11.6 GiB Docker RAM. Стенд использует loopback-порты 8000/4000/8929/2224. Docker хранит данные на C:; после сборок оставалось около 6 GiB, на D: около 745 GiB. Репозиторий передачи не имел .git.
 
-## Внешние блокеры
+## Текущая проверка
 
-- Последняя повторная проверка по просьбе пользователя: `192.168.0.155:8000` недоступен на уровне TCP из Windows и Docker; `DestinationHostUnreachable`. Текущие JSON/tool capabilities повторно проверить невозможно. Запрошены актуальный URL работающего UI и компьютер, на котором он открыт. `artifacts/model-recheck.json`.
-
-- Блокер Docker снят: bootstrap завершён, GitLab healthy, Runner online, API/PostgreSQL/LiteLLM/три gateway запущены.
-- Пользователь задал MTPLX `http://192.168.0.155:8000/v1`, model `mtplx-qwen36-27b-optimized-quality` и ключ в `.env`. Исправлены LiteLLM prefix `openai/` и `MODEL_MODE=local`; key сохранён без вывода. Сервер отвечает на `/models`, но JSON mode даёт 400 из-за отсутствия llguidance; tool call (120 s), minimal и AR (60 s) probes завершились timeout. Сервер сообщает о незавершённом фоновом прогреве.
-
-Контейнерная инфраструктура проверена. Полный цикл с реальной моделью пока blocked её JSON/generation capabilities. Mock не является модельной приёмкой.
+- Блокер подключения снят: MTPLX `http://192.168.0.105:8000/v1`, `mtplx-qwen36-27b-optimized-speed`, MODEL_MODE=local и MODEL_JSON_MODE=prompt. Все 12 реальных запросов JSON/tool/tool-result на spark-1/2/3 и LiteLLM прошли; `artifacts/model-probe-current.json`. Ключ не выводился.
+- Пользовательская конфигурация сейчас включает только Java; Python отключён. Лимиты пользователя сохранены: 1 500 000 tokens, 64 model calls, 7200 seconds. Это локальная модель, не облачная приёмка.
+- Предыдущий run `76a79a987b4a41c974e8e2b700f23075` остановлен на 9 вызовах Analyst: model tool-step limit. История и бюджеты сохранены. Исправлен последний запрос: tool_choice=none требует итоговый JSON, дополнительных tool rounds нет.
+- Java run `a92a9e87c36e564eeaa89f08e88884f2` получил 6 реальных ответов Analyst и остановился на нарушении JSON schema: `artifacts/model-schema-stop.json`. Coder/MR/restart/feedback не выполнены. Добавлен один запрос исправления формата внутри прежнего бюджета; 19 затронутых model/workflow tests passed. Повтор на новой README-only ревизии `2d93f5a390b0f546e35b69b7bebf2c125903abf5` проверяется отдельно; старые runs не сброшены.
+- Исправлена передача MAX_EXTERNAL_ATTEMPTS из .env в Compose API/worker. Пользовательское значение 1 применяется; типы validation errors и имена разрешённых tools теперь доступны в диагностике без prompts/секретов.
 
 ## Выполнено
 
@@ -36,7 +35,7 @@ Windows 11 Pro x64, Intel i5-10400 (12 logical CPU), RAM 23.9 GiB. Python 3.13.7
 
 ## Реально проверено на этом хосте
 
-- **52 автоматизированных тестов passed, без skips**, включая настоящую PostgreSQL 17.6 и PostgresSaver, recovery/locking/deduplication, граф и негативные сценарии. GitLab/model в component tests — явно обозначенные doubles. Новый тест подтверждает отсчёт deadline с первого исполнения без сброса при restart/resume.
+- **58 автоматизированных тестов passed, без skips**, включая настоящую PostgreSQL 17.6 и PostgresSaver, recovery/locking/deduplication, граф и негативные сценарии. GitLab/model в component tests — явно обозначенные doubles. Новый тест подтверждает отсчёт deadline с первого исполнения без сброса при restart/resume.
 - Реальный Docker bootstrap: два demo-проекта, по одному исходному MR, один online Runner; повтор без дубликатов. Java job 2/pipeline 2 и Python job 4/pipeline 4: тесты passed, diff coverage 62.5%, gate failed, свежие JUnit/coverage/logs проверены.
 - Настоящие GitLab webhooks доставлены; canonical polling поставил два run в PostgreSQL, повтор сохранил IDs. Перезапуск контейнера PostgreSQL и пересоздание API сохранили очередь; model_calls=0, started_at=NULL. Это не worker restart во время CI.
 - Настоящие локальные сборки Java/Python: diff coverage **62.5% → 100%**, после известной mutation **по 2 assertion failures**. Добавленные контрольные tests рукописные, не облачные.
@@ -45,9 +44,8 @@ Windows 11 Pro x64, Intel i5-10400 (12 logical CPU), RAM 23.9 GiB. Python 3.13.7
 
 ## Не проверено / оставшиеся внешние блокеры
 
-- **Docker runtime проверен:** GitLab/Runner/CI/API/PostgreSQL работают; LiteLLM и gateway health проверены. Worker намеренно не запущен до успешного model probe. Реальный повтор bootstrap 28.09 остановился на capability check, оба queued run сохранились с model_calls=0.
-- **Локальная модель:** `.env` подключён, шлюзы в local mode, LiteLLM authenticated API 200; фактическая генерация и JSON support blocked сервером. Свидетельства: `artifacts/model-capabilities.json`, `artifacts/model-connection.json`. Реального облачного провайдера пользователь не использует; cloud acceptance отдельно не выполнена.
-- Полный Analyst/Coder/Reviewer, MR с сгенерированными тестами, feedback/worker-CI restart и mutation acceptance **blocked** совместимостью/готовностью MTPLX. Исходные продуктовые MR созданы; MR тестов ещё нет.
+- **Docker runtime и model capabilities проверены:** GitLab/Runner/CI/API/PostgreSQL, три gateway и LiteLLM работают. Worker запущен. Старые ошибки адреса `.155` и native JSON сохранены как история в artifacts и не описывают текущий режим prompt.
+- Полный Analyst/Coder/Reviewer, MR с сгенерированными тестами, feedback/worker-CI restart и mutation acceptance проверяются на Java. Python/cloud acceptance не выполнены.
 - Kubernetes deployment, физические Spark/SGLang/NVFP4 и live YouTrack **not_run**; YouTrack работает только как demo fixture.
 - Собственные agent/proxy/CI images собраны; IDs и apt inventory сохранены в `artifacts/runtime-images.json` и `artifacts/runtime-packages.json`. Нагрузочное распределённое ограничение общей provider quota и production retention требуют дальнейшей эксплуатационной проверки.
 
